@@ -11,12 +11,16 @@ export function PwaInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [isOffline, setIsOffline] = useState(false);
   const [isIos, setIsIos] = useState(false);
   const [showIosPrompt, setShowIosPrompt] = useState(false);
 
   useEffect(() => {
-    // Check online/offline status
+    // Check online/offline status on client mount
+    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+      setIsOffline(!navigator.onLine);
+    }
+
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
 
