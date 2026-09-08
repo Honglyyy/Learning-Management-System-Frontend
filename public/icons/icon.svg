@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#312e81" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded rectangle -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Subtle glow inner container -->
+  <rect x="24" y="24" width="464" height="464" rx="96" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3" />
+
+  <!-- Central Icon Graphic (Graduation Cap & Radiance) -->
+  <g filter="url(#dropShadow)">
+    <!-- Cap top diamond -->
+    <path d="M256 120 L420 196 L256 272 L92 196 Z" fill="#ffffff" />
+    
+    <!-- Cap Under-trim -->
+    <path d="M156 226 L156 310 C156 350, 356 350, 356 310 L356 226 L256 272 Z" fill="#f1f5f9" />
+    
+    <!-- Tassel and ribbon -->
+    <path d="M388 210 L388 336 C388 344, 376 348, 376 340 L376 215 Z" fill="url(#accentGrad)" />
+    <circle cx="382" cy="346" r="10" fill="#38bdf8" />
+
+    <!-- Open pages / Knowledge rays at bottom -->
+    <path d="M140 376 C190 356, 240 370, 256 384 C272 370, 322 356, 372 376 C372 384, 360 392, 256 400 C152 392, 140 384, 140 376 Z" fill="#93c5fd" opacity="0.85" />
+    <path d="M120 404 C180 384, 238 396, 256 412 C274 396, 332 384, 392 404 C392 412, 376 422, 256 428 C136 422, 120 412, 120 404 Z" fill="#60a5fa" opacity="0.6" />
+  </g>
+</svg>
