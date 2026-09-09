@@ -24,6 +24,7 @@ export type CrudConfig = {
   resource: string;       // e.g. "categories" -> /api/categories
   title: string;
   queryKey: string;
+  idField?: string;       // default "categoryId"
   fields: FieldDef[];     // editable form fields
   columns: { key: string; label: string; render?: (row: any) => React.ReactNode }[];
   emptyForm: Record<string, any>;
@@ -32,6 +33,7 @@ export type CrudConfig = {
 
 export function  CrudPanel({ cfg }: { cfg: CrudConfig }) {
   const qc = useQueryClient();
+  const idKey = cfg.idField || "categoryId";
   const list = useQuery<any[]>({ queryKey: [cfg.queryKey], queryFn: () => api(`/api/${cfg.resource}`) });
 
   const del = useMutation({
@@ -54,15 +56,18 @@ export function  CrudPanel({ cfg }: { cfg: CrudConfig }) {
           <Table>
             <TableHeader><TableRow>{cfg.columns.map((c) => <TableHead key={c.key}>{c.label}</TableHead>)}<TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
             <TableBody>
-              {list.data.map((row: any) => (
-                <TableRow key={row.categoryId}>
-                  {cfg.columns.map((c) => <TableCell key={c.key}>{c.render ? c.render(row) : String(row[c.key] ?? "")}</TableCell>)}
-                  <TableCell className="space-x-1 text-right">
-                    <EditDialog cfg={cfg} mode="edit" initial={row} />
-                    <Button size="icon" variant="ghost" onClick={() => { if (confirm("Delete this record?")) del.mutate(row.categoryId); }}><Trash2 className="h-4 w-4" /></Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {list.data.map((row: any) => {
+                const rowId = row[idKey] ?? row.categoryId ?? row.id;
+                return (
+                  <TableRow key={rowId}>
+                    {cfg.columns.map((c) => <TableCell key={c.key}>{c.render ? c.render(row) : String(row[c.key] ?? "")}</TableCell>)}
+                    <TableCell className="space-x-1 text-right">
+                      <EditDialog cfg={cfg} mode="edit" initial={row} />
+                      <Button size="icon" variant="ghost" onClick={() => { if (confirm("Delete this record?")) del.mutate(rowId); }}><Trash2 className="h-4 w-4" /></Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -81,7 +86,8 @@ function EditDialog({ cfg, mode, initial }: { cfg: CrudConfig; mode: "create" | 
     mutationFn: () => {
       const body = cfg.toBody ? cfg.toBody(form) : form;
       if (mode === "create") return api(`/api/${cfg.resource}`, { method: "POST", body });
-      return api(`/api/${cfg.resource}/${initial.categoryId}`, { method: "PUT", body });
+      const rowId = initial ? (initial[cfg.idField || "categoryId"] ?? initial.categoryId ?? initial.id) : undefined;
+      return api(`/api/${cfg.resource}/${rowId}`, { method: "PUT", body });
     },
     onSuccess: () => { toast.success("Saved"); setOpen(false); qc.invalidateQueries({ queryKey: [cfg.queryKey] }); },
     onError: (e) => setError(e),

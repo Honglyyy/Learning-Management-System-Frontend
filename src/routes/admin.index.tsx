@@ -207,7 +207,7 @@ function AdminPage() {
             <select
               aria-label="Select admin workspace tab"
               value={section}
-              onChange={(e) => setSection(e.target.value)}
+              onChange={(e) => setSection(e.target.value as Section)}
               className="h-8 rounded-md border border-input bg-background px-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             >
               {navGroups.map((group) => (
@@ -1173,7 +1173,28 @@ function CourseDialog({ mode, initial, onSaved }: { mode: "create" | "edit"; ini
 
   const save = useMutation({
     mutationFn: () => {
-      const body = { ...form };
+      const parsedInstructor =
+        typeof form.instructor === "number"
+          ? form.instructor
+          : typeof form.instructorId === "number"
+            ? form.instructorId
+            : (parseInt(form.instructor, 10) || parseInt(form.instructorId, 10) || null);
+
+      const body = {
+        title: form.title,
+        description: form.description,
+        price: Number(form.price) || 0,
+        overallDuration: form.overallDuration || "",
+        coverUrl: form.coverUrl || "",
+        coverPublicId: form.coverPublicId || "",
+        instructor: parsedInstructor,
+        categoryId: form.categoryId || [],
+        level: form.level || "ALL_LEVELS",
+        status: form.status || "PUBLISHED",
+        learningOutcomes: form.learningOutcomes || "",
+        requirements: form.requirements || "",
+      };
+
       if (mode === "create") return api("/api/courses", { method: "POST", body });
       const courseId = initial.courseId || initial.id;
       return api(`/api/courses/${courseId}`, { method: "PUT", body });
@@ -1190,45 +1211,63 @@ function CourseDialog({ mode, initial, onSaved }: { mode: "create" | "edit"; ini
 
   return (
     <Dialog open={open}
-        onOpenChange={(o) => { setOpen(o); if (o) { setForm(
-          initial
-              ? {
-                ...initial,
-                coverUrl: initial.coverUrl ?? initial.coverDir ?? "",
-                coverPublicId: initial.coverPublicId ?? "",
-                coverDir: initial.coverUrl ?? initial.coverDir ?? "",
-                categoryId:
-                    initial.categories?.map(
-                        (cat: any) => {
-                          const found = categories?.find(
-                              (c) =>
-                                  c.category === cat
-                          );
+        onOpenChange={(o) => { setOpen(o); if (o) {
+          const instructorIdVal = initial
+            ? (initial.instructorId != null
+                ? Number(initial.instructorId)
+                : (typeof initial.instructor === "number"
+                    ? initial.instructor
+                    : (!isNaN(Number(initial.instructor)) ? Number(initial.instructor) : 1)))
+            : 1;
 
-                          return found?.categoryId;
-                        }
-                    ).filter(Boolean) || [],
-                level: initial.level || "ALL_LEVELS",
-                status: initial.status || "PUBLISHED",
-                learningOutcomes: initial.learningOutcomes || "",
-                requirements: initial.requirements || "",
-              }
-              : {
-                title: "",
-                description: "",
-                price: 0,
-                overallDuration: "",
-                coverUrl: "",
-                coverPublicId: "",
-                coverDir: "",
-                instructor: 1,
-                categoryId: [],
-                level: "ALL_LEVELS",
-                status: "PUBLISHED",
-                learningOutcomes: "",
-                requirements: "",
-              }
-          );
+          const categoryIdsVal = initial
+            ? ((initial.categoryIds && initial.categoryIds.length > 0)
+                ? initial.categoryIds
+                : (initial.categoryId && initial.categoryId.length > 0)
+                  ? initial.categoryId
+                  : initial.categories?.map(
+                      (cat: any) => {
+                        const found = categories?.find(
+                            (c) =>
+                                c.category?.toLowerCase() === (typeof cat === "string" ? cat.toLowerCase() : cat?.category?.toLowerCase())
+                        );
+                        return found?.categoryId;
+                      }
+                  ).filter(Boolean) || [])
+            : [];
+
+          setForm(
+            initial
+                ? {
+                  ...initial,
+                  instructor: instructorIdVal,
+                  instructorId: instructorIdVal,
+                  categoryId: categoryIdsVal,
+                  coverUrl: initial.coverUrl ?? initial.coverDir ?? "",
+                  coverPublicId: initial.coverPublicId ?? "",
+                  coverDir: initial.coverUrl ?? initial.coverDir ?? "",
+                  level: initial.level || "ALL_LEVELS",
+                  status: initial.status || "PUBLISHED",
+                  learningOutcomes: initial.learningOutcomes || "",
+                  requirements: initial.requirements || "",
+                }
+                : {
+                  title: "",
+                  description: "",
+                  price: 0,
+                  overallDuration: "",
+                  coverUrl: "",
+                  coverPublicId: "",
+                  coverDir: "",
+                  instructor: 1,
+                  instructorId: 1,
+                  categoryId: [],
+                  level: "ALL_LEVELS",
+                  status: "PUBLISHED",
+                  learningOutcomes: "",
+                  requirements: "",
+                }
+            );
           }
         }
       }
@@ -1287,7 +1326,7 @@ function CourseDialog({ mode, initial, onSaved }: { mode: "create" | "edit"; ini
               onChange={(e) => setForm({ ...form, requirements: e.target.value })}
             />
           </div>
-          <div className="space-y-1"><Label>Instructor ID</Label><Input type="number" value={form.instructorId || form.instructor || ""} onChange={(e) => setForm({ ...form, instructor: parseInt(e.target.value) || null })} /></div>
+          <div className="space-y-1"><Label>Instructor ID</Label><Input type="number" value={form.instructor ?? form.instructorId ?? ""} onChange={(e) => { const val = parseInt(e.target.value, 10); setForm({ ...form, instructor: isNaN(val) ? null : val, instructorId: isNaN(val) ? null : val }); }} /></div>
           <div className="space-y-1"><Label>Categories</Label>{catsLoading ? <Skeleton className="h-10" /> : <MultiSelect options={catOptions} selected={form.categoryId||[]} onChange={(ids) => setForm({ ...form, categoryId: ids })} placeholder="Select categories..." />}</div>
           <div className="space-y-1">
             <Label>Cover</Label>
@@ -2338,19 +2377,20 @@ function AnswerDialog({ mode, initial, questions, onSaved }: { mode: "create" | 
 }
 
 function CreateAdmin() {
-  const [form, setForm] = useState({ email: "", username: "", password: "", role: "ADMIN" });
+  const [form, setForm] = useState({ fullName: "", email: "", username: "", password: "", role: "ADMIN" });
   const [error, setError] = useState<unknown>(null);
   const m = useMutation({
     mutationFn: () => api("/admin/register", { method: "POST", body: form }),
-    onSuccess: () => { toast.success("Admin created"); setForm({ email: "", username: "", password: "", role: "ADMIN" }); },
+    onSuccess: () => { toast.success("Admin created"); setForm({ fullName: "", email: "", username: "", password: "", role: "ADMIN" }); },
     onError: (e) => setError(e),
   });
   return (
     <div className="max-w-md space-y-4">
       <h2 className="text-lg font-semibold">Create admin user</h2>
-      <p className="text-sm text-muted-foreground">The backend doesn't expose a full users list; this creates a new admin account.</p>
+      <p className="text-sm text-muted-foreground">Provision a new administrator account.</p>
       <ApiAlert error={error} />
       <Card><CardContent className="space-y-3 pt-6">
+        <div className="space-y-1"><Label>Full Name</Label><Input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} /></div>
         <div className="space-y-1"><Label>Email</Label><Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
         <div className="space-y-1"><Label>Username</Label><Input value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} /></div>
         <div className="space-y-1"><Label>Password</Label><Input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>

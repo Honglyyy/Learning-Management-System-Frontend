@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { ApiAlert } from "@/components/ApiAlert";
 import { SiteHeader } from "@/components/SiteHeader";
+import { RequireAuth } from "@/components/RequireRole";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,7 +49,11 @@ type QuizAttempt = {
 };
 
 export const Route = createFileRoute("/lessons/$lessonId/quiz")({
-  component: LessonQuizPage,
+  component: () => (
+    <RequireAuth>
+      <LessonQuizPage />
+    </RequireAuth>
+  ),
 });
 
 function LessonQuizPage() {
@@ -82,6 +87,7 @@ function LessonQuizPage() {
     onSuccess: (attempt) => {
       setSubmitted(true);
       qc.setQueryData(["quiz-attempt", attempt.quizId], attempt);
+      qc.invalidateQueries({ queryKey: ["lesson-quiz", lessonId] });
       qc.invalidateQueries({ queryKey: ["course-progress"] });
       qc.invalidateQueries({ queryKey: ["my-enrollments"] });
       qc.invalidateQueries({ queryKey: ["student-profile"] });

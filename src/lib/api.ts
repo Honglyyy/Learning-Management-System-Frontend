@@ -1,21 +1,12 @@
 // Lightweight fetch wrapper that talks to the Spring Boot LMS backend.
-// Backend base URL: VITE_API_BASE_URL > localStorage('apiBaseUrl') > default.
+// Backend base URL: VITE_API_BASE_URL > default.
 
 // const DEFAULT_BASE = "http://localhost:8080";
 const DEFAULT_BASE = "https://learning-management-system-fk98.onrender.com/";
 
 export function getApiBase(): string {
-  if (typeof window !== "undefined") {
-    const ls = window.localStorage.getItem("apiBaseUrl");
-    if (ls) return ls.replace(/\/$/, "");
-  }
   const env = (import.meta as any).env?.VITE_API_BASE_URL as string | undefined;
   return (env || DEFAULT_BASE).replace(/\/$/, "");
-}
-
-export function setApiBase(url: string) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem("apiBaseUrl", url.replace(/\/$/, ""));
 }
 
 export function getToken(): string | null {

@@ -57,10 +57,14 @@ export function PwaInstallPrompt() {
       navigator.serviceWorker
         .register("/sw.js")
         .then((reg) => {
-          console.log("[PWA] ServiceWorker registered with scope:", reg.scope);
+          if ((import.meta as any).env?.DEV) {
+            console.log("[PWA] ServiceWorker registered with scope:", reg.scope);
+          }
         })
         .catch((err) => {
-          console.warn("[PWA] ServiceWorker registration failed:", err);
+          if ((import.meta as any).env?.DEV) {
+            console.warn("[PWA] ServiceWorker registration failed:", err);
+          }
         });
     }
 

@@ -118,14 +118,14 @@ function ResetPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-xs font-semibold">New Password (min 6 characters)</Label>
+                <Label htmlFor="password" className="text-xs font-semibold">New Password (min 8 characters)</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     required
-                    minLength={6}
+                    minLength={8}
                     placeholder="Enter new strong password"
                     className="pl-9 pr-9 h-9 text-xs"
                     value={form.password}
