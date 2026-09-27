@@ -23,6 +23,7 @@ import {
   Play,
   ExternalLink,
   Trophy,
+  RotateCcw,
 } from "lucide-react";
 
 export const Route = createFileRoute("/my/enrollments")({
@@ -78,8 +79,9 @@ function Page() {
   });
 
   const enrollments = enrollmentsQuery.data || [];
-  const inProgress = enrollments.filter((e) => e.status !== "COMPLETED");
-  const completed = enrollments.filter((e) => e.status === "COMPLETED");
+  const expired = enrollments.filter((e) => e.isExpired || e.status === "EXPIRED");
+  const inProgress = enrollments.filter((e) => !e.isExpired && e.status !== "EXPIRED" && e.status !== "COMPLETED");
+  const completed = enrollments.filter((e) => !e.isExpired && e.status !== "EXPIRED" && e.status === "COMPLETED");
   const favorites = favoritesQuery.data || [];
   const certificates = certificatesQuery.data || [];
 
@@ -134,7 +136,7 @@ function Page() {
         )}
 
         <Tabs defaultValue="in-progress" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 max-w-xl">
+          <TabsList className="grid w-full grid-cols-5 max-w-2xl">
             <TabsTrigger value="in-progress" className="flex items-center gap-1 text-xs sm:text-sm">
               <BookOpen className="h-3.5 w-3.5" />
               <span>In Progress ({inProgress.length})</span>
@@ -142,6 +144,10 @@ function Page() {
             <TabsTrigger value="completed" className="flex items-center gap-1 text-xs sm:text-sm">
               <BookmarkCheck className="h-3.5 w-3.5" />
               <span>Completed ({completed.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="expired" className="flex items-center gap-1 text-xs sm:text-sm">
+              <RotateCcw className="h-3.5 w-3.5 text-amber-500" />
+              <span>Expired ({expired.length})</span>
             </TabsTrigger>
             <TabsTrigger value="certificates" className="flex items-center gap-1 text-xs sm:text-sm">
               <Award className="h-3.5 w-3.5 text-amber-500" />
@@ -194,6 +200,35 @@ function Page() {
             ) : (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {completed.map((e: any) => renderEnrollmentCard(e, cancelEnrollment, certificates))}
+              </div>
+            )}
+          </TabsContent>
+
+          {/* EXPIRED TAB */}
+          <TabsContent value="expired">
+            {enrollmentsQuery.isLoading ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {[1, 2].map((i) => <Skeleton key={i} className="h-40" />)}
+              </div>
+            ) : expired.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-border p-10 text-center">
+                <RotateCcw className="mx-auto h-8 w-8 text-muted-foreground mb-3" />
+                <h3 className="font-semibold text-foreground">No expired courses</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  All your active enrollments are currently valid.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-4 text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                  <RotateCcw className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                  <span>
+                    Your access to these courses has expired. As a returning student, you can re-enroll at an exclusive <strong>50% discount</strong> off current prices!
+                  </span>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {expired.map((e: any) => renderEnrollmentCard(e, cancelEnrollment, certificates))}
+                </div>
               </div>
             )}
           </TabsContent>
@@ -366,14 +401,28 @@ function renderEnrollmentCard(e: any, cancelMutation: any, certificates: any[] =
   const inst = e.instructor || course?.instructor?.username || e.instructorName;
   const enrolledDate = e.enrolledAt || e.createdAt;
   const isCompleted = e.status === "COMPLETED";
+  const isExpired = Boolean(e.isExpired || e.status === "EXPIRED");
   const cert = certificates.find((c: any) => String(c.courseId) === String(courseId));
 
   return (
-    <Card key={e.enrollmentId || e.id || courseId} className="hover:shadow-md transition flex flex-col justify-between">
+    <Card
+      key={e.enrollmentId || e.id || courseId}
+      className={`transition flex flex-col justify-between ${
+        isExpired
+          ? "opacity-85 border-destructive/40 bg-muted/20 hover:opacity-100 hover:shadow-md"
+          : "hover:shadow-md"
+      }`}
+    >
       <div>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between gap-2 mb-1">
-            <Badge variant={isCompleted ? "default" : "secondary"}>{e.status}</Badge>
+            {isExpired ? (
+              <Badge variant="destructive" className="gap-1">
+                <Clock className="h-3 w-3" /> Expired
+              </Badge>
+            ) : (
+              <Badge variant={isCompleted ? "default" : "secondary"}>{e.status}</Badge>
+            )}
             {e.totalPoints != null && e.totalPoints > 0 && (
               <span className="flex items-center gap-1 text-xs font-semibold text-primary">
                 <Trophy className="h-3 w-3 text-amber-500" />
@@ -381,9 +430,11 @@ function renderEnrollmentCard(e: any, cancelMutation: any, certificates: any[] =
               </span>
             )}
           </div>
-          <CardTitle className="text-base line-clamp-1">{title}</CardTitle>
+          <CardTitle className={`text-base line-clamp-1 ${isExpired ? "text-muted-foreground" : ""}`}>
+            {title}
+          </CardTitle>
         </CardHeader>
-        <CardContent className="pb-3 text-sm text-muted-foreground">
+        <CardContent className="pb-3 text-sm text-muted-foreground space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
             {inst && (
               <span className="flex items-center gap-1 font-medium text-foreground">
@@ -397,6 +448,28 @@ function renderEnrollmentCard(e: any, cancelMutation: any, certificates: any[] =
               </span>
             )}
           </div>
+          {isExpired ? (
+            <div className="flex items-center gap-1 text-xs text-destructive font-medium">
+              <Clock className="h-3.5 w-3.5 text-destructive" />
+              Expired on {e.expirationDate ? new Date(e.expirationDate).toLocaleDateString() : "recently"}
+            </div>
+          ) : e.expirationDate ? (
+            <div
+              className={`flex items-center gap-1 text-xs ${
+                e.daysRemaining != null && e.daysRemaining <= 7 && e.daysRemaining >= 0
+                  ? "text-amber-600 dark:text-amber-400 font-semibold"
+                  : "text-muted-foreground"
+              }`}
+            >
+              <Clock className="h-3.5 w-3.5" />
+              Expires {new Date(e.expirationDate).toLocaleDateString()}
+              {e.daysRemaining != null && e.daysRemaining <= 7 && e.daysRemaining >= 0 && (
+                <span className="ml-1 text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded border border-amber-500/20">
+                  {e.daysRemaining === 0 ? "Today" : `${e.daysRemaining}d left`}
+                </span>
+              )}
+            </div>
+          ) : null}
         </CardContent>
       </div>
       <div className="p-4 pt-0 space-y-2">
@@ -405,32 +478,50 @@ function renderEnrollmentCard(e: any, cancelMutation: any, certificates: any[] =
             size="sm"
             variant="outline"
             className="w-full text-xs gap-1.5 border-[#005a87]/40 text-[#005a87] hover:bg-[#005a87]/10 dark:text-cyan-400"
-            onClick={() => window.open(`${getApiBase()}/api/certificates/${encodeURIComponent(cert.certificateCode)}/view`, "_blank", "noopener,noreferrer")}
+            onClick={() =>
+              window.open(
+                `${getApiBase()}/api/certificates/${encodeURIComponent(cert.certificateCode)}/view`,
+                "_blank",
+                "noopener,noreferrer"
+              )
+            }
           >
             <Award className="h-3.5 w-3.5" /> View Certificate
           </Button>
         )}
-        <div className="flex items-center justify-between gap-2">
+        {isExpired ? (
           <Button
             size="sm"
-            className="flex-1"
+            className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium shadow-sm"
             onClick={() => {
               window.location.href = `/courses/${courseId}`;
             }}
           >
-            {isCompleted ? "Review Course" : "Continue"}
+            <RotateCcw className="h-3.5 w-3.5" /> Renew Access (50% Off)
           </Button>
-          {!isCompleted && (
+        ) : (
+          <div className="flex items-center justify-between gap-2">
             <Button
-              variant="outline"
               size="sm"
-              disabled={cancelMutation.isPending}
-              onClick={() => cancelMutation.mutate(courseId)}
+              className="flex-1"
+              onClick={() => {
+                window.location.href = `/courses/${courseId}`;
+              }}
             >
-              Cancel
+              {isCompleted ? "Review Course" : "Continue"}
             </Button>
-          )}
-        </div>
+            {!isCompleted && (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={cancelMutation.isPending}
+                onClick={() => cancelMutation.mutate(courseId)}
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </Card>
   );
