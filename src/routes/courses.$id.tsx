@@ -35,6 +35,8 @@ import {
   Award,
   Trophy,
   Sparkles,
+  RotateCcw,
+  Calendar,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
@@ -123,12 +125,33 @@ function CourseDetail() {
     queryFn: () => api(`/api/courses/${id}/reviews`, { auth: false }),
   });
 
-  const isEnrolled =
-      enrollments.data?.some(
-          (e: any) =>
-              String(e.course?.courseId ?? e.courseId) === String(id) &&
-              (e.status === "ACTIVE" || e.status === "COMPLETED")
-      ) || false;
+  const userEnrollment = enrollments.data?.find(
+    (e: any) => String(e.course?.courseId ?? e.courseId) === String(id)
+  );
+
+  const isExpired = Boolean(
+    course.data?.isExpired ||
+    userEnrollment?.isExpired ||
+    userEnrollment?.status === "EXPIRED"
+  );
+
+  const isEnrolled = Boolean(
+    !isExpired &&
+    (course.data?.isEnrolled || (userEnrollment && (userEnrollment.status === "ACTIVE" || userEnrollment.status === "COMPLETED")))
+  );
+
+  const hasReEnrollmentDiscount = Boolean(
+    course.data?.hasReEnrollmentDiscount ||
+    (isExpired && Number(course.data?.price ?? 0) > 0)
+  );
+
+  const discountedPrice = course.data?.discountedPrice != null
+    ? Number(course.data.discountedPrice)
+    : Number(course.data?.price ?? 0) * 0.5;
+
+  const expirationDate = course.data?.expirationDate || userEnrollment?.expirationDate;
+  const daysRemaining = userEnrollment?.daysRemaining;
+  const isExpiringSoon = daysRemaining != null && daysRemaining <= 7 && daysRemaining >= 0;
 
   const progressQuery = useQuery<any>({
     queryKey: ["course-progress", id],
@@ -393,7 +416,30 @@ function CourseDetail() {
                     {c.rating.toFixed(1)}
               </span>
               )}
+
+              <span className="flex items-center gap-1">
+                <Clock className="h-4 w-4 text-primary" />
+                {c.accessDurationDays ?? 180} Days Access
+              </span>
             </div>
+
+            {/* Expired Access Banner */}
+            {isExpired && (
+              <div className="mt-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 shadow-xs">
+                <div className="flex items-start gap-3">
+                  <RotateCcw className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-foreground text-base">Course Access Expired</h3>
+                      <Badge variant="destructive">Expired</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Your enrollment access has passed its expiration date. You can re-enroll now to regain full access to all lessons, quizzes, and materials with your exclusive <strong className="text-foreground">50% returning student discount</strong>!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Cover */}
             {(c.coverUrl || c.coverDir) && (
@@ -649,6 +695,25 @@ function CourseDetail() {
                       <CheckCircle className="h-5 w-5 text-emerald-600" />
                       Enrolled
                     </span>
+                  ) : isExpired ? (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="line-through text-lg font-normal text-muted-foreground">
+                          ${Number(c.price ?? 0).toFixed(2)}
+                        </span>
+                        <span className="text-2xl font-bold text-foreground">
+                          ${discountedPrice.toFixed(2)}
+                        </span>
+                        <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px]">
+                          50% OFF
+                        </Badge>
+                      </div>
+                      <p className="text-xs font-normal text-emerald-600 dark:text-emerald-400">
+                        Returning Student Discount
+                      </p>
+                    </div>
+                  ) : Number(c.price ?? 0) === 0 ? (
+                    <span className="text-2xl font-bold text-emerald-600">Free</span>
                   ) : (
                     `$${Number(c.price ?? 0).toFixed(2)}`
                   )}
@@ -692,6 +757,25 @@ function CourseDetail() {
                         )}
                         {progressQuery.data?.totalAssignments > 0 && (
                           <span>Assignments: {progressQuery.data?.completedAssignments ?? 0}/{progressQuery.data?.totalAssignments}</span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Expiration Date Info */}
+                    {expirationDate && (
+                      <div className="pt-2 border-t border-border space-y-1">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5 text-muted-foreground" /> Access expires:
+                          </span>
+                          <span className={`font-medium ${isExpiringSoon ? "text-amber-600 dark:text-amber-400 font-semibold" : "text-foreground"}`}>
+                            {new Date(expirationDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                        {isExpiringSoon && (
+                          <p className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+                            ⚠️ Access expires {daysRemaining === 0 ? "today" : `in ${daysRemaining} days`}.
+                          </p>
                         )}
                       </div>
                     )}
@@ -754,7 +838,7 @@ function CourseDetail() {
                   </div>
                 ) : (
                   <Button
-                    className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium"
+                    className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium shadow-sm"
                     disabled={buy.isPending}
                     onClick={() => {
                       if (!isAuthenticated) {
@@ -766,9 +850,17 @@ function CourseDetail() {
                       buy.mutate();
                     }}
                   >
-                    <CreditCard className="h-4 w-4" />
+                    {isExpired ? (
+                      <RotateCcw className="h-4 w-4" />
+                    ) : (
+                      <CreditCard className="h-4 w-4" />
+                    )}
                     {buy.isPending
                       ? "Generating Checkout..."
+                      : isExpired
+                      ? Number(discountedPrice) === 0
+                        ? "Renew Access (Free)"
+                        : `Renew Access (50% Off) — $${discountedPrice.toFixed(2)}`
                       : Number(c.price ?? 0) === 0
                       ? "Enroll for Free"
                       : `Pay with ABA ($${Number(c.price ?? 0).toFixed(2)})`}
@@ -776,7 +868,9 @@ function CourseDetail() {
                 )}
 
                 <p className="text-xs text-center text-muted-foreground">
-                  {Number(c.price ?? 0) === 0
+                  {isExpired
+                    ? "50% re-enrollment discount automatically applied for returning students"
+                    : Number(c.price ?? 0) === 0
                     ? "Free course — instant enrollment"
                     : "Pay via ABA PayWay & enjoy full course upon admin confirmation"}
                 </p>

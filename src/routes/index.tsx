@@ -49,6 +49,7 @@ type Course = {
   description?: string;
   price?: number;
   overallDuration?: string;
+  accessDurationDays?: number;
   coverDir?: string;
   coverUrl?: string;
   coverPublicId?: string;
@@ -82,6 +83,21 @@ function Index() {
     queryFn: () => api("/api/learning/continue", { auth: true }).catch(() => null),
     enabled: isAuthenticated,
   });
+
+  const enrollmentsQuery = useQuery<any[]>({
+    queryKey: ["my-enrollments"],
+    queryFn: () => api("/api/enrollments/me", { auth: true }).catch(() => []),
+    enabled: isAuthenticated,
+  });
+
+  const enrollmentMap = useMemo(() => {
+    const map = new Map<number, any>();
+    for (const e of enrollmentsQuery.data || []) {
+      const cid = Number(e.course?.courseId ?? e.courseId);
+      if (cid) map.set(cid, e);
+    }
+    return map;
+  }, [enrollmentsQuery.data]);
 
   // Main Courses Query
   const { data, isLoading, error } = useQuery<Course[]>({
@@ -465,6 +481,7 @@ function Index() {
               <CourseCardItem
                 key={c.courseId}
                 c={c}
+                enrollment={enrollmentMap.get(c.courseId)}
                 onOpen={() => nav({ to: "/courses/$id", params: { id: String(c.courseId) } })}
                 onToggleFavorite={handleToggleFavorite}
               />
@@ -473,6 +490,7 @@ function Index() {
         ) : (
           <CourseTableView
             courses={filtered.slice(0, visibleCount)}
+            enrollmentMap={enrollmentMap}
             onOpen={(id) => nav({ to: "/courses/$id", params: { id: String(id) } })}
             onToggleFavorite={handleToggleFavorite}
           />
@@ -565,13 +583,19 @@ function Index() {
 
 function CourseCardItem({
   c,
+  enrollment,
   onOpen,
   onToggleFavorite,
 }: {
   c: Course;
+  enrollment?: any;
   onOpen: () => void;
   onToggleFavorite: (courseId: number, currentFav: boolean) => void;
 }) {
+  const isExpired = Boolean(enrollment && (enrollment.isExpired || enrollment.status === "EXPIRED"));
+  const isEnrolled = Boolean(enrollment && !isExpired && (enrollment.status === "ACTIVE" || enrollment.status === "COMPLETED"));
+  const discountedPrice = Number(c.price ?? 0) * 0.5;
+
   const cover = mediaUrl(c.coverUrl || c.coverDir);
   const inst =
     typeof c.instructor === "object"
@@ -594,7 +618,11 @@ function CourseCardItem({
 
   return (
     <Card
-      className="group flex flex-col overflow-hidden border border-border bg-card transition-all hover:border-primary/40 hover:shadow-md cursor-pointer"
+      className={`group flex flex-col overflow-hidden border bg-card transition-all hover:shadow-md cursor-pointer ${
+        isExpired
+          ? "opacity-85 border-destructive/40 bg-muted/20 hover:opacity-100 hover:border-destructive/60"
+          : "border-border hover:border-primary/40"
+      }`}
       onClick={onOpen}
       role="button"
       tabIndex={0}
@@ -650,11 +678,19 @@ function CourseCardItem({
             ))}
           </div>
 
-          {c.level && (
+          {isExpired ? (
+            <span className="rounded bg-destructive text-destructive-foreground px-2 py-0.5 text-[10px] font-semibold shrink-0">
+              Expired
+            </span>
+          ) : isEnrolled ? (
+            <span className="rounded bg-emerald-600 text-white px-2 py-0.5 text-[10px] font-semibold shrink-0 flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" /> Enrolled
+            </span>
+          ) : c.level ? (
             <span className={`rounded px-2 py-0.5 text-[10px] font-semibold border ${levelColor} shrink-0`}>
               {c.level.replace("_", " ")}
             </span>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -693,7 +729,19 @@ function CourseCardItem({
 
           <div className="flex items-center justify-between border-t border-border pt-3">
             <div>
-              {isFree ? (
+              {isExpired ? (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs line-through text-muted-foreground">
+                    ${Number(c.price ?? 0).toFixed(2)}
+                  </span>
+                  <span className="text-sm font-bold text-foreground">
+                    ${discountedPrice.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold px-1 rounded border border-emerald-500/20">
+                    -50%
+                  </span>
+                </div>
+              ) : isFree ? (
                 <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">Free</span>
               ) : (
                 <span className="text-sm font-bold text-foreground">
@@ -701,9 +749,19 @@ function CourseCardItem({
                 </span>
               )}
             </div>
-            <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform">
-              Enroll <ArrowRight className="h-3 w-3" />
-            </span>
+            {isExpired ? (
+              <span className="flex items-center gap-1 text-xs font-semibold text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 transition-transform">
+                <RotateCcw className="h-3 w-3" /> Renew (50% Off)
+              </span>
+            ) : isEnrolled ? (
+              <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform">
+                Continue <ArrowRight className="h-3 w-3" />
+              </span>
+            ) : (
+              <span className="flex items-center gap-1 text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform">
+                Enroll <ArrowRight className="h-3 w-3" />
+              </span>
+            )}
           </div>
         </div>
       </CardContent>
@@ -713,10 +771,12 @@ function CourseCardItem({
 
 function CourseTableView({
   courses,
+  enrollmentMap,
   onOpen,
   onToggleFavorite,
 }: {
   courses: Course[];
+  enrollmentMap?: Map<number, any>;
   onOpen: (courseId: number) => void;
   onToggleFavorite: (courseId: number, currentFav: boolean) => void;
 }) {
@@ -746,11 +806,16 @@ function CourseTableView({
                 return rawList.map((raw: any) => (typeof raw === "string" ? raw : raw?.category)).filter(Boolean);
               })();
               const isFree = !c.price || Number(c.price) === 0;
+              const enrollment = enrollmentMap?.get(c.courseId);
+              const isExpired = Boolean(enrollment && (enrollment.isExpired || enrollment.status === "EXPIRED"));
+              const isEnrolled = Boolean(enrollment && !isExpired && (enrollment.status === "ACTIVE" || enrollment.status === "COMPLETED"));
 
               return (
                 <tr
                   key={c.courseId}
-                  className="hover:bg-muted/30 transition-colors cursor-pointer group"
+                  className={`transition-colors cursor-pointer group ${
+                    isExpired ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-muted/30"
+                  }`}
                   onClick={() => onOpen(c.courseId)}
                 >
                   <td className="px-4 py-3">
@@ -765,10 +830,20 @@ function CourseTableView({
                         )}
                       </div>
                       <div className="min-w-0 max-w-xs sm:max-w-md">
-                        <div className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
-                          {c.title}
+                        <div className="font-semibold text-foreground truncate group-hover:text-primary transition-colors flex items-center gap-1.5">
+                          <span className="truncate">{c.title}</span>
+                          {isExpired && (
+                            <Badge variant="destructive" className="text-[9px] px-1 py-0 shrink-0">
+                              Expired
+                            </Badge>
+                          )}
+                          {isEnrolled && (
+                            <Badge variant="outline" className="text-[9px] px-1 py-0 shrink-0 text-emerald-600 border-emerald-500/30">
+                              Enrolled
+                            </Badge>
+                          )}
                         </div>
-                        <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 mt-0.5">
+                        <div className="flex items-center gap-1 text-[11px] text-muted-foreground truncate mt-0.5">
                           {cats[0] && <span>{cats[0]}</span>}
                           {c.lessonCount != null && <span>&bull; {c.lessonCount} lessons</span>}
                         </div>
@@ -795,7 +870,12 @@ function CourseTableView({
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    {isFree ? (
+                    {isExpired ? (
+                      <div className="flex items-center gap-1.5">
+                        <span className="line-through text-muted-foreground">${Number(c.price ?? 0).toFixed(2)}</span>
+                        <span className="font-bold text-foreground">${(Number(c.price ?? 0) * 0.5).toFixed(2)}</span>
+                      </div>
+                    ) : isFree ? (
                       <span className="font-bold text-emerald-600 dark:text-emerald-400">Free</span>
                     ) : (
                       <span className="font-bold text-foreground">${Number(c.price).toFixed(2)}</span>
@@ -817,13 +897,32 @@ function CourseTableView({
                         </TooltipTrigger>
                         <TooltipContent>{c.isFavorite ? "Remove from wishlist" : "Add to wishlist"}</TooltipContent>
                       </Tooltip>
-                      <Button
-                        size="sm"
-                        className="h-7 text-xs px-2.5"
-                        onClick={() => onOpen(c.courseId)}
-                      >
-                        Enroll
-                      </Button>
+                      {isExpired ? (
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs px-2.5 bg-[#005a87] hover:bg-[#00476a] text-white gap-1"
+                          onClick={() => onOpen(c.courseId)}
+                        >
+                          <RotateCcw className="h-3 w-3" /> Renew (50% Off)
+                        </Button>
+                      ) : isEnrolled ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs px-2.5"
+                          onClick={() => onOpen(c.courseId)}
+                        >
+                          Continue
+                        </Button>
+                      ) : (
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs px-2.5"
+                          onClick={() => onOpen(c.courseId)}
+                        >
+                          Enroll
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -950,6 +950,10 @@ function CourseCard({
                             <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                                 {course.level ? course.level.replace("_", " ") : "ALL LEVELS"}
                             </Badge>
+                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 gap-1 bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30">
+                                <Clock className="h-2.5 w-2.5" />
+                                {course.accessDurationDays ?? 180}d access
+                            </Badge>
                             <Button
                                 size="sm"
                                 variant="outline"
@@ -1007,6 +1011,10 @@ function CourseCard({
                                 {Number(course.rating).toFixed(1)}
                             </span>
                         )}
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground" title="Student enrollment access duration">
+                            <Clock className="h-3.5 w-3.5 text-primary" />
+                            {course.accessDurationDays ?? 180}d access
+                        </span>
                         {course.overallDuration && (
                             <span className="text-muted-foreground">
                                 {course.overallDuration}
@@ -1842,6 +1850,7 @@ function CreateCourseDialog({ onCreated }: { onCreated: () => void }) {
         description: "",
         price: 0,
         overallDuration: "",
+        accessDurationDays: 180,
         coverUrl: "",
         coverPublicId: "",
         coverDir: "",
@@ -1889,11 +1898,15 @@ function CreateCourseDialog({ onCreated }: { onCreated: () => void }) {
     }
 
     const create = useMutation({
-        mutationFn: () =>
-            api("/api/courses/instructor/me", {
+        mutationFn: () => {
+            const rawDays = form.accessDurationDays;
+            const parsedDays = rawDays !== "" && rawDays != null ? parseInt(String(rawDays), 10) : 180;
+            const accessDurationDays = !isNaN(parsedDays) && parsedDays > 0 ? parsedDays : 180;
+            return api("/api/courses/instructor/me", {
                 method: "POST",
-                body: { ...form, instructor: null },
-            }),
+                body: { ...form, accessDurationDays, instructor: null },
+            });
+        },
         onSuccess: () => {
             toast.success("Course created");
             setOpen(false);
@@ -1902,10 +1915,15 @@ function CreateCourseDialog({ onCreated }: { onCreated: () => void }) {
                 description: "",
                 price: 0,
                 overallDuration: "",
+                accessDurationDays: 180,
                 coverUrl: "",
                 coverPublicId: "",
                 coverDir: "",
                 categoryId: [],
+                level: "ALL_LEVELS",
+                status: "PUBLISHED",
+                learningOutcomes: "",
+                requirements: "",
             });
             onCreated();
         },
@@ -1955,6 +1973,7 @@ function EditCourseDialog({
         description: course.description,
         price: course.price,
         overallDuration: course.overallDuration ?? "",
+        accessDurationDays: course.accessDurationDays ?? 180,
         coverUrl: course.coverUrl ?? course.coverDir ?? "",
         coverPublicId: course.coverPublicId ?? "",
         coverDir: course.coverUrl ?? course.coverDir ?? "",
@@ -2002,11 +2021,15 @@ function EditCourseDialog({
     }
 
     const update = useMutation({
-        mutationFn: () =>
-            api(`/api/courses/instructor/me/${course.courseId}`, {
+        mutationFn: () => {
+            const rawDays = form.accessDurationDays;
+            const parsedDays = rawDays !== "" && rawDays != null ? parseInt(String(rawDays), 10) : 180;
+            const accessDurationDays = !isNaN(parsedDays) && parsedDays > 0 ? parsedDays : 180;
+            return api(`/api/courses/instructor/me/${course.courseId}`, {
                 method: "PUT",
-                body: { ...form, instructor: null },
-            }),
+                body: { ...form, accessDurationDays, instructor: null },
+            });
+        },
         onSuccess: () => {
             toast.success("Course updated");
             setOpen(false);
@@ -2089,6 +2112,64 @@ function CourseFormFields({
                         }
                     />
                 </div>
+            </div>
+            <div className="space-y-2 rounded-lg border border-border/70 bg-muted/20 p-3.5">
+                <div className="flex items-center justify-between">
+                    <Label className="flex items-center gap-1.5 font-medium text-sm">
+                        <Clock className="h-4 w-4 text-primary" />
+                        Days Till Course Access Expires
+                    </Label>
+                    {form.accessDurationDays && Number(form.accessDurationDays) > 0 && (
+                        <Badge variant="secondary" className="text-[11px] font-normal">
+                            {Number(form.accessDurationDays) >= 30
+                                ? `~${(Number(form.accessDurationDays) / 30).toFixed(1).replace(/\.0$/, "")} month${Number(form.accessDurationDays) >= 60 ? "s" : ""}`
+                                : `${form.accessDurationDays} days`}
+                        </Badge>
+                    )}
+                </div>
+                <Input
+                    type="number"
+                    min={1}
+                    value={form.accessDurationDays ?? ""}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        setForm({
+                            ...form,
+                            accessDurationDays: val === "" ? "" : Math.max(1, parseInt(val, 10) || 1),
+                        });
+                    }}
+                    placeholder="e.g. 30, 90, 180, 365"
+                    className="font-medium"
+                />
+                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                    <span className="text-[11px] text-muted-foreground mr-1">Quick presets:</span>
+                    {[
+                        { days: 30, label: "30 Days (1 mo)" },
+                        { days: 60, label: "60 Days (2 mo)" },
+                        { days: 90, label: "90 Days (3 mo)" },
+                        { days: 180, label: "180 Days (6 mo)" },
+                        { days: 365, label: "365 Days (1 yr)" },
+                    ].map((preset) => {
+                        const isSelected = Number(form.accessDurationDays) === preset.days;
+                        return (
+                            <button
+                                key={preset.days}
+                                type="button"
+                                onClick={() => setForm({ ...form, accessDurationDays: preset.days })}
+                                className={`rounded-full px-2.5 py-0.5 text-[11px] transition-colors cursor-pointer ${
+                                    isSelected
+                                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                                        : "bg-background border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
+                                }`}
+                            >
+                                {preset.label}
+                            </button>
+                        );
+                    })}
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                    Set how many days students have access to course lessons, quizzes, and materials after enrolling. Once expired, students will see an expiration notice and will be offered a 50% discount to re-enroll.
+                </p>
             </div>
             <div className="space-y-1">
                 <Label>Categories</Label>
