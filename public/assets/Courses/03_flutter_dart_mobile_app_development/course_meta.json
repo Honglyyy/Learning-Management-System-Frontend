@@ -1,0 +1,8 @@
+{
+  "id": "03_flutter_dart_mobile_app_development",
+  "title": "Flutter & Dart Mobile App Development",
+  "level": "BEGINNER_TO_ADVANCED",
+  "duration": "7 hours",
+  "description": "Build high-performance, cross-platform iOS and Android applications with Flutter 3, Dart sound null safety, Riverpod state management, and offline-first local persistence.",
+  "sections_count": 2
+}

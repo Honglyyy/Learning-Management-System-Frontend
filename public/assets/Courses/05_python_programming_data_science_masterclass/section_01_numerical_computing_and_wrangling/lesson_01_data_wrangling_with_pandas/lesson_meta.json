@@ -1,0 +1,9 @@
+{
+  "order_index": 1,
+  "id": "lesson_01_data_wrangling_with_pandas",
+  "title": "Lesson 1.1: Data Wrangling with Pandas",
+  "overview": "Master Series, DataFrames, indexing, missing data imputation, groupby aggregations, and merge operations.",
+  "has_video": true,
+  "video_file": "video_1_data_wrangling_with_pandas.mp4",
+  "has_quiz": true
+}

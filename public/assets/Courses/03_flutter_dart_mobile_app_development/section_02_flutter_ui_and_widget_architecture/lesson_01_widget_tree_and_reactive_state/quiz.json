@@ -1,0 +1,16 @@
+{
+  "title": "Quiz 2.1: Widget Architecture Checkpoint",
+  "questions": [
+    {
+      "question": "What object in Flutter is responsible for actual layout calculations and GPU painting?",
+      "options": [
+        "Widget",
+        "Element",
+        "RenderObject",
+        "State"
+      ],
+      "correct": 2,
+      "explanation": "RenderObject handles layout, sizing, and painting to the canvas via Skia/Impeller."
+    }
+  ]
+}

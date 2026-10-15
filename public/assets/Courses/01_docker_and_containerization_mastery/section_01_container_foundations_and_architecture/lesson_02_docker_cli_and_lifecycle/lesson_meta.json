@@ -1,0 +1,9 @@
+{
+  "order_index": 2,
+  "id": "lesson_02_docker_cli_and_lifecycle",
+  "title": "Lesson 1.2: Docker CLI & Container Lifecycle Management",
+  "overview": "Master the essential lifecycle states of containers: creation, execution, pause, stop, and removal.",
+  "has_video": false,
+  "video_file": null,
+  "has_quiz": false
+}

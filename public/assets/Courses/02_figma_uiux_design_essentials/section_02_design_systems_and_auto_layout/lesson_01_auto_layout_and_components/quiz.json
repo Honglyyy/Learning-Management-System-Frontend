@@ -1,0 +1,16 @@
+{
+  "title": "Quiz 2.1: Auto Layout & Variables",
+  "questions": [
+    {
+      "question": "Which sizing setting makes a Figma frame automatically expand to occupy all remaining container space?",
+      "options": [
+        "Hug Contents",
+        "Fill Container",
+        "Fixed Width",
+        "Absolute Position"
+      ],
+      "correct": 1,
+      "explanation": "'Fill Container' causes the element to stretch dynamically to fill available width or height."
+    }
+  ]
+}

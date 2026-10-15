@@ -1,0 +1,9 @@
+{
+  "order_index": 1,
+  "id": "lesson_01_virtualization_vs_containerization",
+  "title": "Lesson 1.1: Virtualization vs. Containerization",
+  "overview": "Understand the architectural paradigm shift between hypervisor-based Virtual Machines and OS-level container isolation using Linux kernel primitives.",
+  "has_video": true,
+  "video_file": "video_1_virtualization_vs_containers.mp4",
+  "has_quiz": true
+}

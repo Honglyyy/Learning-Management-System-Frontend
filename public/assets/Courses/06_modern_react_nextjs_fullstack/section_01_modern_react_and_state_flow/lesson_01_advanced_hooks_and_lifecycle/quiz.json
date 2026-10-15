@@ -1,0 +1,16 @@
+{
+  "title": "Quiz 1.1: React Hooks Mastery",
+  "questions": [
+    {
+      "question": "What is the primary purpose of useCallback in React?",
+      "options": [
+        "To memoize a callback function instance across re-renders to prevent child component re-renders",
+        "To execute HTTP queries on the server",
+        "To replace CSS stylesheets",
+        "To force immediate DOM repaints"
+      ],
+      "correct": 0,
+      "explanation": "useCallback returns a memoized version of the callback that only changes if one of the dependencies has changed."
+    }
+  ]
+}

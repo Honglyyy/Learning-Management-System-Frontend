@@ -13,6 +13,19 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    plugins: [
+      {
+        name: "rolldown-to-rollup-compat",
+        configEnvironment(name, envConfig) {
+          if ((envConfig.build as any)?.rolldownOptions) {
+            envConfig.build.rollupOptions = {
+              ...(envConfig.build as any).rolldownOptions,
+              ...(envConfig.build as any).rollupOptions,
+            };
+          }
+        },
+      },
+    ],
     server: {
       fs: {
         allow: [

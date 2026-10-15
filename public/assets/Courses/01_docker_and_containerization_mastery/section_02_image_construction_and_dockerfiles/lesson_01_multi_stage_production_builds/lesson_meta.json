@@ -1,0 +1,9 @@
+{
+  "order_index": 1,
+  "id": "lesson_01_multi_stage_production_builds",
+  "title": "Lesson 2.1: Multi-Stage Production Dockerfiles",
+  "overview": "Construct minimal, secure production container images by separating compilation environments from final lightweight runtime images.",
+  "has_video": true,
+  "video_file": "video_1_multi_stage_production_builds.mp4",
+  "has_quiz": true
+}
