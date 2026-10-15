@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_compose_orchestration",
-  "title": "Lesson 3.1: Multi-Service Architecture with Docker Compose",
-  "overview": "Orchestrate frontend, backend, PostgreSQL database, and Redis caching using compose.yaml.",
-  "has_video": false,
-  "video_file": null,
-  "has_quiz": false
-}

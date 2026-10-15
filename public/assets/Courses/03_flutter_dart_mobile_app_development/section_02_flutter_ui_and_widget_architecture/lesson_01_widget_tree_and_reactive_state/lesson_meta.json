@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_widget_tree_and_reactive_state",
-  "title": "Lesson 2.1: The Reactive Widget Tree & State Management",
-  "overview": "Deep dive into the Element and RenderObject trees, reactive state management with Riverpod, and immutable data modeling.",
-  "has_video": true,
-  "video_file": "video_1_widget_tree_and_reactive_state.mp4",
-  "has_quiz": true
-}

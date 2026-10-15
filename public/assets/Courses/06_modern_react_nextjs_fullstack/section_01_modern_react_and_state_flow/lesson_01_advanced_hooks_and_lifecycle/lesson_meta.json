@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_advanced_hooks_and_lifecycle",
-  "title": "Lesson 1.1: Advanced React Hooks & Lifecycle",
-  "overview": "Deep dive into useState, useEffect synchronization, useMemo, useCallback, and custom hooks design.",
-  "has_video": true,
-  "video_file": "video_1_advanced_hooks_and_lifecycle.mp4",
-  "has_quiz": true
-}

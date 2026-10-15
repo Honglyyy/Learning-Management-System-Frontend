@@ -1,8 +1,0 @@
-{
-  "id": "05_python_programming_data_science_masterclass",
-  "title": "Python Programming & Data Science Masterclass",
-  "level": "BEGINNER_TO_ADVANCED",
-  "duration": "8 hours",
-  "description": "End-to-end Python for data science: NumPy vectorized operations, Pandas data wrangling, Matplotlib/Seaborn visualizations, Scikit-Learn machine learning pipelines, and Streamlit deployment.",
-  "sections_count": 2
-}

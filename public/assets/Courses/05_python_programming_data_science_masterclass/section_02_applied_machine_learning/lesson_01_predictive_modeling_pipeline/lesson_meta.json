@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_predictive_modeling_pipeline",
-  "title": "Lesson 2.1: Scikit-Learn Predictive Modeling Pipeline",
-  "overview": "Construct production ML pipelines with StandardScaler, OneHotEncoder, Random Forest classifier, and cross-validation.",
-  "has_video": true,
-  "video_file": "video_1_predictive_modeling_pipeline.mp4",
-  "has_quiz": true
-}
