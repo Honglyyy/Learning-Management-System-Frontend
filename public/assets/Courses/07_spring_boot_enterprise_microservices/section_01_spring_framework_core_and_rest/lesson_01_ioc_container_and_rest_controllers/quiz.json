@@ -1,0 +1,16 @@
+{
+  "title": "Quiz 1.1: Spring Core & Dependency Injection",
+  "questions": [
+    {
+      "question": "What design pattern is the foundation of the Spring Framework's IoC container?",
+      "options": [
+        "Dependency Injection (Inversion of Control)",
+        "Singleton only without lifecycle management",
+        "Model-View-Intent",
+        "Active Record"
+      ],
+      "correct": 0,
+      "explanation": "Inversion of Control (IoC) via Dependency Injection delegates bean instantiation and wiring to the Spring ApplicationContext."
+    }
+  ]
+}

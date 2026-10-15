@@ -1,0 +1,27 @@
+{
+  "title": "Quiz 2.1: Dockerfile & Build Optimization",
+  "questions": [
+    {
+      "question": "What is the primary benefit of multi-stage Docker builds?",
+      "options": [
+        "They eliminate the need for an operating system kernel",
+        "They keep compilers and source code out of the final production image",
+        "They allow running Windows containers directly on Linux",
+        "They automatically push images to Docker Hub"
+      ],
+      "correct": 1,
+      "explanation": "Multi-stage builds allow developers to compile artifacts in a heavy build stage and copy only the compiled binary into a minimal runtime image."
+    },
+    {
+      "question": "Why should `package.json` or `go.mod` be copied before the rest of the application code?",
+      "options": [
+        "Because Docker requires alphabetical copying",
+        "To maximize Docker layer caching and avoid re-downloading dependencies on code changes",
+        "To set read-only permissions automatically",
+        "To prevent multi-threading bugs"
+      ],
+      "correct": 1,
+      "explanation": "Copying dependency manifests first ensures that dependencies are cached unless the manifest itself changes."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "order_index": 1,
+  "id": "lesson_01_mtv_pattern_and_orm",
+  "title": "Lesson 1.1: MTV Architecture & Django ORM",
+  "overview": "Understand Django's Model-Template-View architecture, request-response cycle, model fields, and QuerySet optimization.",
+  "has_video": true,
+  "video_file": "video_1_mtv_pattern_and_orm.mp4",
+  "has_quiz": true
+}

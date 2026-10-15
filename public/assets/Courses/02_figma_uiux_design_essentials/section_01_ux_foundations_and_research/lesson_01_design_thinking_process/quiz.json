@@ -1,0 +1,16 @@
+{
+  "title": "Quiz 1.1: UX Strategy & Research",
+  "questions": [
+    {
+      "question": "What is the first phase of the Stanford Design Thinking process?",
+      "options": [
+        "Prototyping",
+        "Empathize",
+        "Define",
+        "Visual Design"
+      ],
+      "correct": 1,
+      "explanation": "Empathize is the initial stage where designers gather deep insights into user behaviors, pain points, and motivations."
+    }
+  ]
+}

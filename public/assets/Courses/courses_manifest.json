@@ -1,0 +1,482 @@
+{
+  "01_docker_and_containerization_mastery": {
+    "id": "01_docker_and_containerization_mastery",
+    "title": "Docker & Containerization Mastery",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_container_foundations_and_architecture",
+        "title": "Section 1: Container Foundations & Docker Architecture",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_virtualization_vs_containerization",
+            "title": "Lesson 1.1: Virtualization vs. Containerization",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_01_virtualization_vs_containerization/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_01_virtualization_vs_containerization/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_01_virtualization_vs_containerization/video_1_virtualization_vs_containers.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_01_virtualization_vs_containerization/quiz.json"
+          },
+          {
+            "id": "lesson_02_docker_cli_and_lifecycle",
+            "title": "Lesson 1.2: Docker CLI & Container Lifecycle Management",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_02_docker_cli_and_lifecycle/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_01_container_foundations_and_architecture/lesson_02_docker_cli_and_lifecycle/lesson_material.md",
+            "video_file": null,
+            "quiz_file": null
+          }
+        ],
+        "assignments": []
+      },
+      {
+        "id": "section_02_image_construction_and_dockerfiles",
+        "title": "Section 2: Image Construction & Multi-Stage Builds",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_multi_stage_production_builds",
+            "title": "Lesson 2.1: Multi-Stage Production Dockerfiles",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/lesson_01_multi_stage_production_builds/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/lesson_01_multi_stage_production_builds/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/lesson_01_multi_stage_production_builds/video_1_multi_stage_production_builds.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/lesson_01_multi_stage_production_builds/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_multi_tier_containerization",
+            "title": "Assignment 1: Multi-Tier Web Application Containerization",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/assignment_01_multi_tier_containerization/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_02_image_construction_and_dockerfiles/assignment_01_multi_tier_containerization/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_03_production_compose_and_clustering",
+        "title": "Section 3: Docker Compose & Orchestration",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_03_production_compose_and_clustering/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_compose_orchestration",
+            "title": "Lesson 3.1: Multi-Service Architecture with Docker Compose",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_03_production_compose_and_clustering/lesson_01_compose_orchestration/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_03_production_compose_and_clustering/lesson_01_compose_orchestration/lesson_material.md",
+            "video_file": null,
+            "quiz_file": null
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_production_microservice_cluster",
+            "title": "Assignment 2: Production-Grade Microservice Cluster Deployment",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_03_production_compose_and_clustering/assignment_02_production_microservice_cluster/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/01_docker_and_containerization_mastery/section_03_production_compose_and_clustering/assignment_02_production_microservice_cluster/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 4"
+          }
+        ]
+      }
+    ]
+  },
+  "02_figma_uiux_design_essentials": {
+    "id": "02_figma_uiux_design_essentials",
+    "title": "Figma UI/UX Design Essentials",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_ux_foundations_and_research",
+        "title": "Section 1: UX Foundations & Product Strategy",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_design_thinking_process",
+            "title": "Lesson 1.1: The 5 Stages of Design Thinking",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/lesson_01_design_thinking_process/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/lesson_01_design_thinking_process/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/lesson_01_design_thinking_process/video_1_design_thinking_process.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/lesson_01_design_thinking_process/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_user_research_and_wireflow",
+            "title": "Assignment 1: User Research & Low-Fidelity Mobile App Wireflow",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/assignment_01_user_research_and_wireflow/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_01_ux_foundations_and_research/assignment_01_user_research_and_wireflow/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_design_systems_and_auto_layout",
+        "title": "Section 2: Auto Layout & Design System Architecture",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_auto_layout_and_components",
+            "title": "Lesson 2.1: Auto Layout 5.0 & Responsive Component Sets",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/lesson_01_auto_layout_and_components/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/lesson_01_auto_layout_and_components/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/lesson_01_auto_layout_and_components/video_1_auto_layout_and_components.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/lesson_01_auto_layout_and_components/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_design_system_and_saas_dashboard",
+            "title": "Assignment 2: High-Fidelity SaaS Dashboard & Design System",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/assignment_02_design_system_and_saas_dashboard/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/02_figma_uiux_design_essentials/section_02_design_systems_and_auto_layout/assignment_02_design_system_and_saas_dashboard/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "03_flutter_dart_mobile_app_development": {
+    "id": "03_flutter_dart_mobile_app_development",
+    "title": "Flutter & Dart Mobile App Development",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_dart_programming_foundations",
+        "title": "Section 1: Modern Dart & Sound Null Safety",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_null_safety_and_oop",
+            "title": "Lesson 1.1: Sound Null Safety & Modern Dart",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/lesson_01_null_safety_and_oop/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/lesson_01_null_safety_and_oop/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/lesson_01_null_safety_and_oop/video_1_null_safety_and_oop.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/lesson_01_null_safety_and_oop/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_responsive_ecommerce_catalog",
+            "title": "Assignment 1: Responsive E-Commerce Product Catalog UI",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/assignment_01_responsive_ecommerce_catalog/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_01_dart_programming_foundations/assignment_01_responsive_ecommerce_catalog/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_flutter_ui_and_widget_architecture",
+        "title": "Section 2: Flutter UI & State Management",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_widget_tree_and_reactive_state",
+            "title": "Lesson 2.1: The Reactive Widget Tree & State Management",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/lesson_01_widget_tree_and_reactive_state/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/lesson_01_widget_tree_and_reactive_state/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/lesson_01_widget_tree_and_reactive_state/video_1_widget_tree_and_reactive_state.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/lesson_01_widget_tree_and_reactive_state/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_offline_first_weather_app",
+            "title": "Assignment 2: Full-Featured Offline-First Weather App",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/assignment_02_offline_first_weather_app/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/03_flutter_dart_mobile_app_development/section_02_flutter_ui_and_widget_architecture/assignment_02_offline_first_weather_app/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "04_ethical_hacking_kali_linux": {
+    "id": "04_ethical_hacking_kali_linux",
+    "title": "Ethical Hacking with Kali Linux",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_reconnaissance_and_scanning",
+        "title": "Section 1: Threat Reconnaissance & Port Scanning",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_network_scanning_with_nmap",
+            "title": "Lesson 1.1: Active Reconnaissance with Nmap",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/lesson_01_network_scanning_with_nmap/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/lesson_01_network_scanning_with_nmap/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/lesson_01_network_scanning_with_nmap/video_1_network_scanning_with_nmap.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/lesson_01_network_scanning_with_nmap/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_network_audit_and_recon_report",
+            "title": "Assignment 1: Target Reconnaissance & Threat Audit Report",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/assignment_01_network_audit_and_recon_report/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_01_reconnaissance_and_scanning/assignment_01_network_audit_and_recon_report/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_vulnerability_and_exploitation",
+        "title": "Section 2: Vulnerability Assessment & Exploitation",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_metasploit_framework",
+            "title": "Lesson 2.1: Exploitation & Metasploit Framework",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/lesson_01_metasploit_framework/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/lesson_01_metasploit_framework/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/lesson_01_metasploit_framework/video_1_metasploit_framework.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/lesson_01_metasploit_framework/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_lab_penetration_test_report",
+            "title": "Assignment 2: Lab Machine Exploitation & Remediation Report",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/assignment_02_lab_penetration_test_report/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/04_ethical_hacking_kali_linux/section_02_vulnerability_and_exploitation/assignment_02_lab_penetration_test_report/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "05_python_programming_data_science_masterclass": {
+    "id": "05_python_programming_data_science_masterclass",
+    "title": "Python Programming & Data Science Masterclass",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_numerical_computing_and_wrangling",
+        "title": "Section 1: Data Wrangling with NumPy & Pandas",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_data_wrangling_with_pandas",
+            "title": "Lesson 1.1: Data Wrangling with Pandas",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/lesson_01_data_wrangling_with_pandas/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/lesson_01_data_wrangling_with_pandas/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/lesson_01_data_wrangling_with_pandas/video_1_data_wrangling_with_pandas.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/lesson_01_data_wrangling_with_pandas/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_exploratory_data_analysis",
+            "title": "Assignment 1: Exploratory Data Analysis on Financial Transactions",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/assignment_01_exploratory_data_analysis/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_01_numerical_computing_and_wrangling/assignment_01_exploratory_data_analysis/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_applied_machine_learning",
+        "title": "Section 2: Scikit-Learn ML Pipelines & Deployment",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_predictive_modeling_pipeline",
+            "title": "Lesson 2.1: Scikit-Learn Predictive Modeling Pipeline",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/lesson_01_predictive_modeling_pipeline/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/lesson_01_predictive_modeling_pipeline/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/lesson_01_predictive_modeling_pipeline/video_1_predictive_modeling_pipeline.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/lesson_01_predictive_modeling_pipeline/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_end_to_end_ml_web_app",
+            "title": "Assignment 2: End-to-End Predictive ML Pipeline & Streamlit App",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/assignment_02_end_to_end_ml_web_app/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/05_python_programming_data_science_masterclass/section_02_applied_machine_learning/assignment_02_end_to_end_ml_web_app/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "06_modern_react_nextjs_fullstack": {
+    "id": "06_modern_react_nextjs_fullstack",
+    "title": "Modern React & Next.js Full Stack Development",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_modern_react_and_state_flow",
+        "title": "Section 1: Modern React Hooks & State Flow",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_advanced_hooks_and_lifecycle",
+            "title": "Lesson 1.1: Advanced React Hooks & Lifecycle",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/lesson_01_advanced_hooks_and_lifecycle/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/lesson_01_advanced_hooks_and_lifecycle/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/lesson_01_advanced_hooks_and_lifecycle/video_1_advanced_hooks_and_lifecycle.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/lesson_01_advanced_hooks_and_lifecycle/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_kanban_task_board",
+            "title": "Assignment 1: Interactive Kanban Task Board with Optimistic Updates",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/assignment_01_kanban_task_board/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_01_modern_react_and_state_flow/assignment_01_kanban_task_board/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_nextjs_app_router_architecture",
+        "title": "Section 2: Next.js App Router & Full-Stack Architecture",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_server_components_and_routing",
+            "title": "Lesson 2.1: Next.js App Router & Server Components",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/lesson_01_server_components_and_routing/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/lesson_01_server_components_and_routing/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/lesson_01_server_components_and_routing/video_1_server_components_and_routing.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/lesson_01_server_components_and_routing/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_fullstack_saas_platform",
+            "title": "Assignment 2: Full-Stack SaaS Subscription Platform with Stripe",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/assignment_02_fullstack_saas_platform/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/06_modern_react_nextjs_fullstack/section_02_nextjs_app_router_architecture/assignment_02_fullstack_saas_platform/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "07_spring_boot_enterprise_microservices": {
+    "id": "07_spring_boot_enterprise_microservices",
+    "title": "Spring Boot & Enterprise Microservices",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_spring_framework_core_and_rest",
+        "title": "Section 1: Inversion of Control & Enterprise REST APIs",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_ioc_container_and_rest_controllers",
+            "title": "Lesson 1.1: Inversion of Control & Spring IoC",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/lesson_01_ioc_container_and_rest_controllers/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/lesson_01_ioc_container_and_rest_controllers/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/lesson_01_ioc_container_and_rest_controllers/video_1_ioc_container_and_rest_controllers.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/lesson_01_ioc_container_and_rest_controllers/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_banking_ledger_rest_api",
+            "title": "Assignment 1: Enterprise Banking Ledger REST API",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/assignment_01_banking_ledger_rest_api/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_01_spring_framework_core_and_rest/assignment_01_banking_ledger_rest_api/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_microservices_and_event_driven_kafka",
+        "title": "Section 2: Microservices & Event-Driven Kafka",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_event_driven_messaging_with_kafka",
+            "title": "Lesson 2.1: Event-Driven Microservices with Kafka",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/lesson_01_event_driven_messaging_with_kafka/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/lesson_01_event_driven_messaging_with_kafka/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/lesson_01_event_driven_messaging_with_kafka/video_1_event_driven_messaging_with_kafka.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/lesson_01_event_driven_messaging_with_kafka/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_distributed_ecommerce_microservice_ecosystem",
+            "title": "Assignment 2: Distributed E-Commerce Microservices Cluster",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/assignment_02_distributed_ecommerce_microservice_ecosystem/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/07_spring_boot_enterprise_microservices/section_02_microservices_and_event_driven_kafka/assignment_02_distributed_ecommerce_microservice_ecosystem/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  },
+  "08_python_django_full_stack_web": {
+    "id": "08_python_django_full_stack_web",
+    "title": "Python Django Full Stack Web Applications",
+    "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/course_meta.json",
+    "sections": [
+      {
+        "id": "section_01_django_architecture_and_orm",
+        "title": "Section 1: Django Architecture & ORM Foundations",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_mtv_pattern_and_orm",
+            "title": "Lesson 1.1: MTV Architecture & Django ORM",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/lesson_01_mtv_pattern_and_orm/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/lesson_01_mtv_pattern_and_orm/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/lesson_01_mtv_pattern_and_orm/video_1_mtv_pattern_and_orm.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/lesson_01_mtv_pattern_and_orm/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_01_editorial_publishing_platform",
+            "title": "Assignment 1: Content Publishing & Editorial Engine with Custom Admin",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/assignment_01_editorial_publishing_platform/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_01_django_architecture_and_orm/assignment_01_editorial_publishing_platform/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 2"
+          }
+        ]
+      },
+      {
+        "id": "section_02_apis_and_background_tasks",
+        "title": "Section 2: Django REST Framework & Celery Queues",
+        "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/section_meta.json",
+        "lessons": [
+          {
+            "id": "lesson_01_django_rest_framework_and_celery",
+            "title": "Lesson 2.1: Django REST Framework & Celery Async Tasks",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/lesson_01_django_rest_framework_and_celery/lesson_meta.json",
+            "material_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/lesson_01_django_rest_framework_and_celery/lesson_material.md",
+            "video_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/lesson_01_django_rest_framework_and_celery/video_1_django_rest_framework_and_celery.mp4",
+            "quiz_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/lesson_01_django_rest_framework_and_celery/quiz.json"
+          }
+        ],
+        "assignments": [
+          {
+            "id": "assignment_02_fullstack_marketplace_platform",
+            "title": "Assignment 2: Full-Stack Marketplace Platform with DRF & Celery",
+            "meta_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/assignment_02_fullstack_marketplace_platform/assignment_meta.json",
+            "brief_file": "/home/ly/University/Flutter/Assets/Courses/08_python_django_full_stack_web/section_02_apis_and_background_tasks/assignment_02_fullstack_marketplace_platform/assignment_brief.md",
+            "max_score": 100,
+            "due_week": "Week 5"
+          }
+        ]
+      }
+    ]
+  }
+}
