@@ -12,4 +12,14 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      fs: {
+        allow: [
+          "..",
+          "/home/ly/University/Flutter",
+        ],
+      },
+    },
+  },
 });
