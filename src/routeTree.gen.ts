@@ -9,55 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyOtpRouteImport } from './routes/verify-otp'
-import { Route as VerifyCertificateRouteImport } from './routes/verify-certificate'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RegisterRouteImport } from './routes/register'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as InstructorsRouteImport } from './routes/instructors'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as InstructorIndexRouteImport } from './routes/instructor.index'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as InstructorsRouteImport } from './routes/instructors'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifyCertificateRouteImport } from './routes/verify-certificate'
+import { Route as VerifyOtpRouteImport } from './routes/verify-otp'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as MyPaymentsRouteImport } from './routes/my.payments'
-import { Route as MyEnrollmentsRouteImport } from './routes/my.enrollments'
 import { Route as CoursesIdRouteImport } from './routes/courses.$id'
+import { Route as InstructorIndexRouteImport } from './routes/instructor.index'
+import { Route as MyEnrollmentsRouteImport } from './routes/my.enrollments'
+import { Route as MyPaymentsRouteImport } from './routes/my.payments'
 import { Route as LessonsLessonIdQuizRouteImport } from './routes/lessons.$lessonId.quiz'
 
-const VerifyOtpRoute = VerifyOtpRouteImport.update({
-  id: '/verify-otp',
-  path: '/verify-otp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VerifyCertificateRoute = VerifyCertificateRouteImport.update({
-  id: '/verify-certificate',
-  path: '/verify-certificate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InstructorsRoute = InstructorsRouteImport.update({
-  id: '/instructors',
-  path: '/instructors',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -65,14 +35,39 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const InstructorsRoute = InstructorsRouteImport.update({
+  id: '/instructors',
+  path: '/instructors',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InstructorIndexRoute = InstructorIndexRouteImport.update({
-  id: '/instructor/',
-  path: '/instructor/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyCertificateRoute = VerifyCertificateRouteImport.update({
+  id: '/verify-certificate',
+  path: '/verify-certificate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyOtpRoute = VerifyOtpRouteImport.update({
+  id: '/verify-otp',
+  path: '/verify-otp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -80,9 +75,14 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MyPaymentsRoute = MyPaymentsRouteImport.update({
-  id: '/my/payments',
-  path: '/my/payments',
+const CoursesIdRoute = CoursesIdRouteImport.update({
+  id: '/courses/$id',
+  path: '/courses/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorIndexRoute = InstructorIndexRouteImport.update({
+  id: '/instructor/',
+  path: '/instructor/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyEnrollmentsRoute = MyEnrollmentsRouteImport.update({
@@ -90,9 +90,9 @@ const MyEnrollmentsRoute = MyEnrollmentsRouteImport.update({
   path: '/my/enrollments',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CoursesIdRoute = CoursesIdRouteImport.update({
-  id: '/courses/$id',
-  path: '/courses/$id',
+const MyPaymentsRoute = MyPaymentsRouteImport.update({
+  id: '/my/payments',
+  path: '/my/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LessonsLessonIdQuizRoute = LessonsLessonIdQuizRouteImport.update({
@@ -227,53 +227,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify-otp': {
-      id: '/verify-otp'
-      path: '/verify-otp'
-      fullPath: '/verify-otp'
-      preLoaderRoute: typeof VerifyOtpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/verify-certificate': {
-      id: '/verify-certificate'
-      path: '/verify-certificate'
-      fullPath: '/verify-certificate'
-      preLoaderRoute: typeof VerifyCertificateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/instructors': {
-      id: '/instructors'
-      path: '/instructors'
-      fullPath: '/instructors'
-      preLoaderRoute: typeof InstructorsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -283,18 +241,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/instructors': {
+      id: '/instructors'
+      path: '/instructors'
+      fullPath: '/instructors'
+      preLoaderRoute: typeof InstructorsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/instructor/': {
-      id: '/instructor/'
-      path: '/instructor'
-      fullPath: '/instructor/'
-      preLoaderRoute: typeof InstructorIndexRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-certificate': {
+      id: '/verify-certificate'
+      path: '/verify-certificate'
+      fullPath: '/verify-certificate'
+      preLoaderRoute: typeof VerifyCertificateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-otp': {
+      id: '/verify-otp'
+      path: '/verify-otp'
+      fullPath: '/verify-otp'
+      preLoaderRoute: typeof VerifyOtpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -304,11 +297,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/my/payments': {
-      id: '/my/payments'
-      path: '/my/payments'
-      fullPath: '/my/payments'
-      preLoaderRoute: typeof MyPaymentsRouteImport
+    '/courses/$id': {
+      id: '/courses/$id'
+      path: '/courses/$id'
+      fullPath: '/courses/$id'
+      preLoaderRoute: typeof CoursesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor/': {
+      id: '/instructor/'
+      path: '/instructor'
+      fullPath: '/instructor/'
+      preLoaderRoute: typeof InstructorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my/enrollments': {
@@ -318,11 +318,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyEnrollmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/courses/$id': {
-      id: '/courses/$id'
-      path: '/courses/$id'
-      fullPath: '/courses/$id'
-      preLoaderRoute: typeof CoursesIdRouteImport
+    '/my/payments': {
+      id: '/my/payments'
+      path: '/my/payments'
+      fullPath: '/my/payments'
+      preLoaderRoute: typeof MyPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lessons/$lessonId/quiz': {
