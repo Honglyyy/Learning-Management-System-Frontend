@@ -1,8 +1,0 @@
-{
-  "id": "04_ethical_hacking_kali_linux",
-  "title": "Ethical Hacking with Kali Linux",
-  "level": "INTERMEDIATE_TO_ADVANCED",
-  "duration": "6 hours 30 min",
-  "description": "Learn ethical hacking methodologies, passive/active OSINT reconnaissance, Nmap network scanning, OWASP Top 10 web vulnerabilities, Metasploit exploitation, and professional pentesting reporting.",
-  "sections_count": 2
-}

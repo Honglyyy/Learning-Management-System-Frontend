@@ -1,8 +1,0 @@
-{
-  "id": "06_modern_react_nextjs_fullstack",
-  "title": "Modern React & Next.js Full Stack Development",
-  "level": "INTERMEDIATE_TO_ADVANCED",
-  "duration": "7 hours",
-  "description": "Modern full-stack web applications with React 19, custom hooks, TanStack Query, Next.js App Router, React Server Components (RSC), Server Actions, Prisma, and Auth.js.",
-  "sections_count": 2
-}

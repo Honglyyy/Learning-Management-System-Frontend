@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_django_rest_framework_and_celery",
-  "title": "Lesson 2.1: Django REST Framework & Celery Async Tasks",
-  "overview": "Build robust REST APIs with DRF ViewSets, ModelSerializers, JWT authentication, and offload long-running tasks to Celery with Redis.",
-  "has_video": true,
-  "video_file": "video_1_django_rest_framework_and_celery.mp4",
-  "has_quiz": true
-}

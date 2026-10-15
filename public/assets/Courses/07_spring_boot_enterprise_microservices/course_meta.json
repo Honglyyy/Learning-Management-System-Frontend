@@ -1,8 +1,0 @@
-{
-  "id": "07_spring_boot_enterprise_microservices",
-  "title": "Spring Boot & Enterprise Microservices",
-  "level": "INTERMEDIATE_TO_ADVANCED",
-  "duration": "8 hours",
-  "description": "Architect enterprise Java microservices with Spring Boot 3, Spring Data JPA, Hibernate, Spring Security 6 (JWT/OAuth2), Apache Kafka event streaming, and Resilience4j circuit breakers.",
-  "sections_count": 2
-}

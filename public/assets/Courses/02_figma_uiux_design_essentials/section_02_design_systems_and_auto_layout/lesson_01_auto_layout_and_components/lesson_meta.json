@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_auto_layout_and_components",
-  "title": "Lesson 2.1: Auto Layout 5.0 & Responsive Component Sets",
-  "overview": "Master dynamic padding, hug/fill constraints, wrap modes, and design variable tokens in Figma.",
-  "has_video": true,
-  "video_file": "video_1_auto_layout_and_components.mp4",
-  "has_quiz": true
-}

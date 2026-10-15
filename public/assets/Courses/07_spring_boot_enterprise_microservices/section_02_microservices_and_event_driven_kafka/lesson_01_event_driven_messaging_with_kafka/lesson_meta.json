@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_event_driven_messaging_with_kafka",
-  "title": "Lesson 2.1: Event-Driven Microservices with Kafka",
-  "overview": "Implement distributed order processing using Apache Kafka topics, producers, consumers, Spring Cloud Gateway, and Resilience4j circuit breakers.",
-  "has_video": true,
-  "video_file": "video_1_event_driven_messaging_with_kafka.mp4",
-  "has_quiz": true
-}

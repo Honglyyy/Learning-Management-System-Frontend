@@ -1,8 +1,0 @@
-{
-  "id": "08_python_django_full_stack_web",
-  "title": "Python Django Full Stack Web Applications",
-  "level": "BEGINNER_TO_ADVANCED",
-  "duration": "6 hours",
-  "description": "Full-stack Python web engineering with Django 5: MVT architecture, Django ORM, Admin customization, Django REST Framework (DRF), Celery asynchronous background queues, and Docker production deployment.",
-  "sections_count": 2
-}

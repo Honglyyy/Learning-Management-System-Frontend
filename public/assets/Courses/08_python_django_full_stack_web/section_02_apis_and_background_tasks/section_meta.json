@@ -1,8 +1,0 @@
-{
-  "order_index": 2,
-  "id": "section_02_apis_and_background_tasks",
-  "title": "Section 2: Django REST Framework & Celery Queues",
-  "duration": "2 hours",
-  "lessons_count": 1,
-  "assignments_count": 1
-}

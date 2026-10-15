@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_server_components_and_routing",
-  "title": "Lesson 2.1: Next.js App Router & Server Components",
-  "overview": "Leverage React Server Components (RSC), streaming with Suspense, nested layouts, and Server Actions for mutation.",
-  "has_video": true,
-  "video_file": "video_1_server_components_and_routing.mp4",
-  "has_quiz": true
-}

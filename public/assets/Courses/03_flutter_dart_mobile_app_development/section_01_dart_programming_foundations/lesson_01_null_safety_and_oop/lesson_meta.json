@@ -1,9 +1,0 @@
-{
-  "order_index": 1,
-  "id": "lesson_01_null_safety_and_oop",
-  "title": "Lesson 1.1: Sound Null Safety & Modern Dart",
-  "overview": "Master Dart's type system, sound null safety, mixins, factory constructors, and asynchronous programming with Futures and Streams.",
-  "has_video": true,
-  "video_file": "video_1_null_safety_and_oop.mp4",
-  "has_quiz": true
-}
