@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { SiteHeader } from "@/components/SiteHeader";
 import { RequireAuth } from "@/components/RequireRole";
@@ -8,7 +9,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BookOpen, Clock } from "lucide-react";
+import { BookOpen, Clock, QrCode, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
+import { BakongPaymentDialog, type BakongPaymentRecord } from "@/components/BakongPaymentDialog";
 
 export const Route = createFileRoute("/my/payments")({
   head: () => ({ meta: [{ title: "My payments — Lumen LMS" }] }),
@@ -23,9 +26,28 @@ function statusVariant(s: string): "default" | "secondary" | "destructive" | "ou
 }
 
 function Page() {
+  const qc = useQueryClient();
+  const [selectedPayment, setSelectedPayment] = useState<BakongPaymentRecord | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const { data, isLoading, error } = useQuery<any[]>({
     queryKey: ["my-payments"],
     queryFn: () => api("/api/payments/me"),
+  });
+
+  const regenerateMutation = useMutation({
+    mutationFn: (courseId: number) =>
+      api<BakongPaymentRecord>("/api/payments/checkout", {
+        method: "POST",
+        body: { courseId, provider: "BAKONG_KHQR" },
+        auth: true,
+      }),
+    onSuccess: (payment) => {
+      qc.invalidateQueries({ queryKey: ["my-payments"] });
+      setSelectedPayment(payment);
+      setDialogOpen(true);
+    },
+    onError: (e: any) => toast.error(e?.message || "Failed to generate Bakong KHQR"),
   });
 
   const hasPending = data?.some((p: any) => p.status === "PENDING");
@@ -36,7 +58,7 @@ function Page() {
       <div className="container mx-auto px-4 py-10">
         <h1 className="mb-2 text-2xl font-semibold text-foreground">My payments</h1>
         <p className="text-sm text-muted-foreground mb-6">
-          Review your course transactions and payment statuses.
+          Review your course transactions and Bakong KHQR payment statuses.
         </p>
 
         {hasPending && (
@@ -44,7 +66,7 @@ function Page() {
             <Clock className="h-4 w-4 shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold">Pending Payment</p>
-              <p>You have pending payment transaction(s) awaiting bank verification.</p>
+              <p>You have pending Bakong transaction(s). Open a pending invoice to view the KHQR code or verify completion.</p>
             </div>
           </div>
         )}
@@ -78,7 +100,15 @@ function Page() {
                     <TableCell>
                       <Badge
                         variant={statusVariant(p.status)}
-                        className={p.status === "PAID" ? "bg-emerald-600 text-white" : p.status === "PENDING" ? "bg-amber-100 text-amber-800 border-amber-300" : ""}
+                        className={
+                          p.status === "PAID"
+                            ? "bg-emerald-600 text-white"
+                            : p.status === "PENDING"
+                            ? "bg-amber-100 text-amber-800 border-amber-300"
+                            : p.status === "EXPIRED"
+                            ? "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300"
+                            : ""
+                        }
                       >
                         {p.status}
                       </Badge>
@@ -93,8 +123,28 @@ function Page() {
                             <BookOpen className="h-3 w-3" /> Go to Course
                           </Link>
                         </Button>
-                      ) : p.status === "PENDING" ? (
-                        <span className="text-xs text-muted-foreground">Awaiting bank verification</span>
+                      ) : p.status === "PENDING" && p.qrCode ? (
+                        <Button
+                          size="sm"
+                          variant="default"
+                          className="h-7 text-xs gap-1 bg-[#005a87] hover:bg-[#00476a] text-white"
+                          onClick={() => {
+                            setSelectedPayment(p);
+                            setDialogOpen(true);
+                          }}
+                        >
+                          <QrCode className="h-3 w-3" /> Pay / Check QR
+                        </Button>
+                      ) : p.status === "PENDING" || p.status === "EXPIRED" ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs gap-1"
+                          disabled={regenerateMutation.isPending}
+                          onClick={() => regenerateMutation.mutate(p.courseId)}
+                        >
+                          <RefreshCw className="h-3 w-3" /> Pay with Bakong
+                        </Button>
                       ) : (
                         <span className="text-xs text-muted-foreground">—</span>
                       )}
@@ -106,6 +156,18 @@ function Page() {
           </div>
         )}
       </div>
+
+      <BakongPaymentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        payment={selectedPayment}
+        isRegenerating={regenerateMutation.isPending}
+        onRegenerate={() => {
+          if (selectedPayment?.courseId) {
+            regenerateMutation.mutate(selectedPayment.courseId);
+          }
+        }}
+      />
     </div>
   );
 }

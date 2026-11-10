@@ -37,7 +37,9 @@ import {
   Sparkles,
   RotateCcw,
   Calendar,
+  QrCode,
 } from "lucide-react";
+import { BakongPaymentDialog, type BakongPaymentRecord } from "@/components/BakongPaymentDialog";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import {
@@ -67,6 +69,8 @@ function CourseDetail() {
 
   const [checkoutError, setCheckoutError] = useState<unknown>(null);
   const [activeLesson, setActiveLesson] = useState<any>(null);
+  const [activeBakongPayment, setActiveBakongPayment] = useState<BakongPaymentRecord | null>(null);
+  const [bakongModalOpen, setBakongModalOpen] = useState(false);
 
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
@@ -115,7 +119,10 @@ function CourseDetail() {
   });
 
   const pendingPayment = myPayments.data?.find(
-    (p: any) => String(p.courseId) === String(id) && p.status === "PENDING"
+    (p: any) =>
+      String(p.courseId) === String(id) &&
+      p.status === "PENDING" &&
+      (!p.expiresAt || new Date(p.expiresAt).getTime() > Date.now())
   );
 
   const reviews = useQuery({
@@ -249,7 +256,7 @@ function CourseDetail() {
     return { lessonId, title: `Lesson ${lessonId}` };
   };
 
-  // FREE COURSE ENROLLMENT (Paid checkout pending Bakong integration)
+  // FREE COURSE ENROLLMENT
   const buy = useMutation({
     mutationFn: async () => {
       return api<any>(`/api/enrollments`, {
@@ -264,6 +271,29 @@ function CourseDetail() {
       qc.invalidateQueries({ queryKey: ["course", id] });
       toast.success("You are now enrolled in this free course!");
       nav({ to: "/my/enrollments" });
+    },
+    onError: (e) => setCheckoutError(e),
+  });
+
+  // BAKONG KHQR PAID CHECKOUT
+  const bakongCheckout = useMutation({
+    mutationFn: async () => {
+      return api<BakongPaymentRecord>(`/api/payments/checkout`, {
+        method: "POST",
+        body: { courseId: Number(id), provider: "BAKONG_KHQR" },
+        auth: true,
+      });
+    },
+    onSuccess: (payment) => {
+      setCheckoutError(null);
+      qc.invalidateQueries({ queryKey: ["my-payments"] });
+      setActiveBakongPayment(payment);
+      setBakongModalOpen(true);
+      if (payment.status === "PAID") {
+        qc.invalidateQueries({ queryKey: ["my-enrollments"] });
+        qc.invalidateQueries({ queryKey: ["course", id] });
+        qc.invalidateQueries({ queryKey: ["lessons-status", id] });
+      }
     },
     onError: (e) => setCheckoutError(e),
   });
@@ -794,8 +824,24 @@ function CourseDetail() {
                       <p className="font-semibold mb-1 flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5 shrink-0" /> Payment Pending Verification
                       </p>
-                      <p>You have a pending payment transaction for this course awaiting bank verification.</p>
+                      <p>You have an open Bakong payment invoice awaiting transfer confirmation.</p>
                     </div>
+                    <Button
+                      className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium shadow-sm"
+                      disabled={bakongCheckout.isPending}
+                      onClick={() => {
+                        if (pendingPayment.qrCode) {
+                          setActiveBakongPayment(pendingPayment);
+                          setBakongModalOpen(true);
+                        } else {
+                          setCheckoutError(null);
+                          bakongCheckout.mutate();
+                        }
+                      }}
+                    >
+                      <QrCode className="h-4 w-4" />
+                      {bakongCheckout.isPending ? "Loading KHQR..." : "Resume Bakong KHQR Payment"}
+                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -832,18 +878,28 @@ function CourseDetail() {
                   </Button>
                 ) : (
                   <Button
-                    variant="secondary"
-                    className="w-full gap-1.5 font-medium"
-                    disabled
+                    className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium shadow-sm"
+                    disabled={bakongCheckout.isPending}
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        nav({ to: "/login" });
+                        return;
+                      }
+
+                      setCheckoutError(null);
+                      bakongCheckout.mutate();
+                    }}
                   >
                     {isExpired ? (
                       <RotateCcw className="h-4 w-4" />
                     ) : (
-                      <CreditCard className="h-4 w-4" />
+                      <QrCode className="h-4 w-4" />
                     )}
-                    {isExpired
-                      ? `Renew Unavailable (50% Off — $${discountedPrice.toFixed(2)})`
-                      : `Bakong Payment Coming Soon ($${Number(c.price ?? 0).toFixed(2)})`}
+                    {bakongCheckout.isPending
+                      ? "Generating KHQR..."
+                      : isExpired
+                      ? `Renew with Bakong (50% Off — $${discountedPrice.toFixed(2)})`
+                      : `Pay with Bakong KHQR ($${Number(c.price ?? 0).toFixed(2)})`}
                   </Button>
                 )}
 
@@ -851,8 +907,8 @@ function CourseDetail() {
                   {Number(c.price ?? 0) === 0 || (isExpired && Number(discountedPrice) === 0)
                     ? "Free course — instant enrollment"
                     : isExpired
-                    ? "50% re-enrollment discount applies automatically once Bakong payment is integrated"
-                    : "Online payment methods were removed and are ready for Bakong bank-verified checkout"}
+                    ? "50% returning student discount applies automatically via Bakong KHQR"
+                    : "Scan KHQR with Bakong or any Cambodian bank app for instant unlock"}
                 </p>
 
                 <Button
@@ -964,6 +1020,20 @@ function CourseDetail() {
             </Card>
           </aside>
         </div>
+
+        <BakongPaymentDialog
+          open={bakongModalOpen}
+          onOpenChange={setBakongModalOpen}
+          payment={activeBakongPayment}
+          isRegenerating={bakongCheckout.isPending}
+          onRegenerate={() => {
+            setCheckoutError(null);
+            bakongCheckout.mutate();
+          }}
+          onPaid={() => {
+            setCheckoutError(null);
+          }}
+        />
       </div>
   );
 }
