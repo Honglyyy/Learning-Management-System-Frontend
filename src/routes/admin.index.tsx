@@ -40,7 +40,6 @@ import {
   Plus,
   Trash2,
   Upload,
-  Check,
   FileText,
   Search,
   RefreshCw,
@@ -151,14 +150,6 @@ interface QuizReportDTO {
 function AdminPage() {
   const [section, setSection] = useState<Section>("overview");
 
-  // Optional badge counts from lightweight queries
-  const pendingPaymentsQuery = useQuery<any[]>({
-    queryKey: ["admin-payments"],
-    queryFn: () => api("/api/payments"),
-    staleTime: 30000,
-  });
-  const pendingCount = pendingPaymentsQuery.data?.filter((p) => p.status === "PENDING").length || 0;
-
   const navGroups: NavGroup[] = [
     {
       label: "Platform",
@@ -173,7 +164,7 @@ function AdminPage() {
         { key: "users", label: "Users & Roles", icon: Users },
         { key: "courses", label: "Courses Catalog", icon: BookOpen },
         { key: "enrollments", label: "Enrollments", icon: GraduationCap },
-        { key: "payments", label: "Financials", icon: CreditCard, badge: pendingCount > 0 ? pendingCount : undefined },
+        { key: "payments", label: "Financials", icon: CreditCard },
       ],
     },
     {
@@ -537,7 +528,7 @@ function Overview({ onNavigate }: { onNavigate: (sec: Section) => void }) {
           <CardHeader className="flex flex-row items-center justify-between py-3 px-4 border-b border-border/50">
             <div>
               <CardTitle className="text-sm font-semibold">Recent Financial Transactions</CardTitle>
-              <CardDescription className="text-[11px]">Latest ABA PayWay & gateway events</CardDescription>
+              <CardDescription className="text-[11px]">Latest payment gateway events</CardDescription>
             </div>
             <Button
               variant="ghost"
@@ -1562,8 +1553,6 @@ function LessonDialog({ mode, sections,initial, onSaved }: { mode: "create" | "e
   );
 }
 
-const PAYMENT_STATUSES = ["PENDING", "PAID", "FAILED", "REFUNDED"];
-
 function AdminPayments() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
@@ -1572,25 +1561,6 @@ function AdminPayments() {
   const list = useQuery<any[]>({
     queryKey: ["admin-payments"],
     queryFn: () => api("/api/payments"),
-  });
-
-  const update = useMutation({
-    mutationFn: ({ id, status }: { id: number; status: string }) =>
-      api(`/api/payments/${id}/status`, {
-        method: "PATCH",
-        body: { status, providerReference: "admin-confirmed" },
-      }),
-    onSuccess: (_, vars) => {
-      if (vars.status === "PAID") {
-        toast.success("Payment confirmed and student enrolled!");
-      } else {
-        toast.success(`Payment status updated to ${vars.status}`);
-      }
-      qc.invalidateQueries({ queryKey: ["admin-payments"] });
-      qc.invalidateQueries({ queryKey: ["admin-enrollments"] });
-      qc.invalidateQueries({ queryKey: ["admin-dashboard"] });
-    },
-    onError: () => toast.error("Failed to update payment status"),
   });
 
   const del = useMutation({
@@ -1631,7 +1601,7 @@ function AdminPayments() {
         <div>
           <h2 className="text-lg font-bold tracking-tight text-foreground">Financial Ledger & Transactions</h2>
           <p className="text-xs text-muted-foreground">
-            Audit gateway settlements, confirm ABA PayWay transactions, and track student purchase orders.
+            Audit gateway settlements and track student purchase orders.
           </p>
         </div>
       </div>
@@ -1653,12 +1623,12 @@ function AdminPayments() {
 
         <Card className="border-border/80 shadow-xs">
           <CardHeader className="py-2.5 px-4 flex flex-row items-center justify-between">
-            <p className="text-xs font-medium text-muted-foreground">Pending Approvals</p>
+            <p className="text-xs font-medium text-muted-foreground">Pending Transactions</p>
             <Clock className="h-4 w-4 text-amber-600" />
           </CardHeader>
           <CardContent className="px-4 pb-3">
             <div className="text-xl font-bold text-foreground">{pendingCount}</div>
-            <p className="text-[11px] text-muted-foreground">Awaiting manual or webhook verification</p>
+            <p className="text-[11px] text-muted-foreground">Awaiting bank gateway verification</p>
           </CardContent>
         </Card>
 
@@ -1728,7 +1698,7 @@ function AdminPayments() {
                 <TableHead>Amount</TableHead>
                 <TableHead>Gateway</TableHead>
                 <TableHead>Reference</TableHead>
-                <TableHead className="w-48">Status / Verification</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -1767,7 +1737,7 @@ function AdminPayments() {
 
                     <TableCell>
                       <Badge variant="outline" className="text-[10px] font-medium">
-                        {p.provider || "ABA_PAYWAY"}
+                        {p.provider || "—"}
                       </Badge>
                     </TableCell>
 
@@ -1776,35 +1746,18 @@ function AdminPayments() {
                     </TableCell>
 
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Select
-                          value={p.status}
-                          onValueChange={(v) => update.mutate({ id: p.paymentId || p.id, status: v })}
-                          disabled={update.isPending}
-                        >
-                          <SelectTrigger className="w-28 h-7 text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PAYMENT_STATUSES.map((s) => (
-                              <SelectItem key={s} value={s} className="text-xs">
-                                {s}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-
-                        {p.status === "PENDING" && (
-                          <Button
-                            size="sm"
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white h-7 text-[11px] gap-1 font-medium whitespace-nowrap px-2"
-                            disabled={update.isPending}
-                            onClick={() => update.mutate({ id: p.paymentId || p.id, status: "PAID" })}
-                          >
-                            <Check className="h-3 w-3" /> Confirm
-                          </Button>
-                        )}
-                      </div>
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] font-medium ${
+                          p.status === "PAID"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300"
+                            : p.status === "PENDING"
+                            ? "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-300"
+                            : "bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950 dark:text-rose-300"
+                        }`}
+                      >
+                        {p.status || "PENDING"}
+                      </Badge>
                     </TableCell>
 
                     <TableCell className="text-xs text-muted-foreground whitespace-nowrap">

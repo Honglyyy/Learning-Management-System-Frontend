@@ -67,7 +67,6 @@ function CourseDetail() {
 
   const [checkoutError, setCheckoutError] = useState<unknown>(null);
   const [activeLesson, setActiveLesson] = useState<any>(null);
-  const [checkoutPendingModal, setCheckoutPendingModal] = useState<any>(null);
 
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
@@ -250,41 +249,21 @@ function CourseDetail() {
     return { lessonId, title: `Lesson ${lessonId}` };
   };
 
-  // ENROLL VIA ABA PAYWAY
+  // FREE COURSE ENROLLMENT (Paid checkout pending Bakong integration)
   const buy = useMutation({
     mutationFn: async () => {
-      const isFreeCourse = Number(course.data?.price ?? 0) === 0;
-
-      const checkout = await api<any>(`/api/payments/checkout`, {
+      return api<any>(`/api/enrollments`, {
         method: "POST",
-        body: { courseId: Number(id), provider: "ABA_PAYWAY" },
+        body: { courseId: Number(id) },
         auth: true,
       });
-
-      if (isFreeCourse) {
-        // Free course can be confirmed immediately
-        await api(`/api/payments/${checkout.paymentId}/confirm`, {
-          method: "POST",
-          auth: true,
-        });
-        return { ...checkout, isFreeCourse: true };
-      }
-
-      return { ...checkout, isFreeCourse: false };
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["my-enrollments"] });
       qc.invalidateQueries({ queryKey: ["my-payments"] });
-
-      if (res.isFreeCourse) {
-        toast.success("You are now enrolled in this free course!");
-        nav({ to: "/my/enrollments" });
-      } else {
-        if (res.paymentUrl) {
-          window.open(res.paymentUrl, "_blank", "noopener,noreferrer");
-        }
-        setCheckoutPendingModal(res);
-      }
+      qc.invalidateQueries({ queryKey: ["course", id] });
+      toast.success("You are now enrolled in this free course!");
+      nav({ to: "/my/enrollments" });
     },
     onError: (e) => setCheckoutError(e),
   });
@@ -809,24 +788,14 @@ function CourseDetail() {
                       </div>
                     ) : null}
                   </div>
-                ) : pendingPayment ? (
+                ) : !(Number(c.price ?? 0) === 0 || (isExpired && Number(discountedPrice) === 0)) && pendingPayment ? (
                   <div className="space-y-2.5">
                     <div className="rounded-md border border-amber-300 bg-amber-50 dark:bg-amber-950/40 p-3 text-xs text-amber-800 dark:text-amber-200">
                       <p className="font-semibold mb-1 flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5 shrink-0" /> Payment Pending Approval
+                        <Clock className="h-3.5 w-3.5 shrink-0" /> Payment Pending Verification
                       </p>
-                      <p>Your payment via ABA Mobile is awaiting admin verification. Once confirmed, you will automatically be enrolled.</p>
+                      <p>You have a pending payment transaction for this course awaiting bank verification.</p>
                     </div>
-                    {pendingPayment.paymentUrl && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full text-xs gap-1 border-primary text-primary"
-                        onClick={() => window.open(pendingPayment.paymentUrl, "_blank", "noopener,noreferrer")}
-                      >
-                        <ExternalLink className="h-3.5 w-3.5" /> Re-open ABA PayWay
-                      </Button>
-                    )}
                     <Button
                       variant="ghost"
                       size="sm"
@@ -836,7 +805,7 @@ function CourseDetail() {
                       View in My Payments
                     </Button>
                   </div>
-                ) : (
+                ) : (Number(c.price ?? 0) === 0 || (isExpired && Number(discountedPrice) === 0)) ? (
                   <Button
                     className="w-full bg-[#005a87] hover:bg-[#00476a] text-white gap-1.5 font-medium shadow-sm"
                     disabled={buy.isPending}
@@ -856,23 +825,34 @@ function CourseDetail() {
                       <CreditCard className="h-4 w-4" />
                     )}
                     {buy.isPending
-                      ? "Generating Checkout..."
+                      ? "Enrolling..."
                       : isExpired
-                      ? Number(discountedPrice) === 0
-                        ? "Renew Access (Free)"
-                        : `Renew Access (50% Off) — $${discountedPrice.toFixed(2)}`
-                      : Number(c.price ?? 0) === 0
-                      ? "Enroll for Free"
-                      : `Pay with ABA ($${Number(c.price ?? 0).toFixed(2)})`}
+                      ? "Renew Access (Free)"
+                      : "Enroll for Free"}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    className="w-full gap-1.5 font-medium"
+                    disabled
+                  >
+                    {isExpired ? (
+                      <RotateCcw className="h-4 w-4" />
+                    ) : (
+                      <CreditCard className="h-4 w-4" />
+                    )}
+                    {isExpired
+                      ? `Renew Unavailable (50% Off — $${discountedPrice.toFixed(2)})`
+                      : `Bakong Payment Coming Soon ($${Number(c.price ?? 0).toFixed(2)})`}
                   </Button>
                 )}
 
                 <p className="text-xs text-center text-muted-foreground">
-                  {isExpired
-                    ? "50% re-enrollment discount automatically applied for returning students"
-                    : Number(c.price ?? 0) === 0
+                  {Number(c.price ?? 0) === 0 || (isExpired && Number(discountedPrice) === 0)
                     ? "Free course — instant enrollment"
-                    : "Pay via ABA PayWay & enjoy full course upon admin confirmation"}
+                    : isExpired
+                    ? "50% re-enrollment discount applies automatically once Bakong payment is integrated"
+                    : "Online payment methods were removed and are ready for Bakong bank-verified checkout"}
                 </p>
 
                 <Button
@@ -984,68 +964,6 @@ function CourseDetail() {
             </Card>
           </aside>
         </div>
-
-        {/* ================= ABA PAYWAY CHECKOUT MODAL ================= */}
-        {checkoutPendingModal && (
-          <Dialog open={!!checkoutPendingModal} onOpenChange={() => setCheckoutPendingModal(null)}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-lg">
-                  <CreditCard className="h-5 w-5 text-primary" />
-                  ABA PayWay Checkout
-                </DialogTitle>
-              </DialogHeader>
-
-              <div className="space-y-4 py-2">
-                <div className="rounded-lg border bg-muted/40 p-4 text-center space-y-1">
-                  <p className="text-xs text-muted-foreground">Course</p>
-                  <p className="font-semibold text-sm line-clamp-1">{c?.title}</p>
-                  <p className="text-3xl font-bold text-primary mt-2">
-                    ${Number(checkoutPendingModal.amount ?? c?.price ?? 0).toFixed(2)}
-                  </p>
-                </div>
-
-                <div className="rounded-md border border-amber-200 bg-amber-50 dark:bg-amber-950/30 p-3.5 space-y-2 text-xs text-amber-900 dark:text-amber-200">
-                  <p className="font-semibold text-sm">Next Steps:</p>
-                  <ol className="list-decimal list-inside space-y-1 text-xs leading-relaxed">
-                    <li>Open ABA Mobile using the button below to pay <strong>${Number(checkoutPendingModal.amount ?? c?.price ?? 0).toFixed(2)}</strong>.</li>
-                    <li>The Admin will verify and confirm your payment.</li>
-                    <li>Once confirmed, you will automatically have full access to the course!</li>
-                  </ol>
-                </div>
-
-                {checkoutPendingModal.paymentUrl && (
-                  <Button
-                    className="w-full bg-[#005a87] hover:bg-[#00476a] text-white font-medium py-5 gap-2"
-                    onClick={() => window.open(checkoutPendingModal.paymentUrl, "_blank", "noopener,noreferrer")}
-                  >
-                    <ExternalLink className="h-4 w-4" /> Open ABA Mobile / PayWay
-                  </Button>
-                )}
-
-                <div className="flex gap-2 pt-1">
-                  <Button
-                    variant="outline"
-                    className="w-full text-xs"
-                    onClick={() => {
-                      setCheckoutPendingModal(null);
-                      nav({ to: "/my/payments" });
-                    }}
-                  >
-                    View in My Payments
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full text-xs"
-                    onClick={() => setCheckoutPendingModal(null)}
-                  >
-                    Close
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
       </div>
   );
 }
