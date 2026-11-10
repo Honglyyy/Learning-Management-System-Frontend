@@ -1572,16 +1572,38 @@ function AdminPayments() {
     },
   });
 
+  const verifyBakong = useMutation({
+    mutationFn: (id: number) => api<any>(`/api/payments/${id}/status`, { auth: true }),
+    onSuccess: (updated) => {
+      qc.invalidateQueries({ queryKey: ["admin-payments"] });
+      qc.invalidateQueries({ queryKey: ["admin-dashboard"] });
+      if (updated?.status === "PAID") {
+        toast.success(`Payment #${updated.paymentId} verified as PAID and student enrolled!`);
+      } else if (updated?.status === "EXPIRED") {
+        toast.info(`Payment #${updated.paymentId} has expired.`);
+      } else {
+        toast.info(`Payment #${updated?.paymentId ?? ""} is still pending on Bakong.`);
+      }
+    },
+    onError: (e: any) => toast.error(e?.message || "Failed to verify Bakong payment status"),
+  });
+
   const allPayments = list.data || [];
   const totalPaidVolume = allPayments
     .filter((p) => p.status === "PAID")
     .reduce((sum, p) => sum + Number(p.amount || 0), 0);
   const pendingCount = allPayments.filter((p) => p.status === "PENDING").length;
   const paidCount = allPayments.filter((p) => p.status === "PAID").length;
+  const expiredCount = allPayments.filter((p) => p.status === "EXPIRED").length;
   const failedCount = allPayments.filter((p) => p.status === "FAILED" || p.status === "REFUNDED").length;
 
   const filteredPayments = allPayments.filter((p) => {
-    const matchesStatus = statusFilter === "ALL" ? true : p.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "ALL"
+        ? true
+        : statusFilter === "FAILED"
+        ? p.status === "FAILED" || p.status === "REFUNDED"
+        : p.status === statusFilter;
     if (!matchesStatus) return false;
 
     if (!search.trim()) return true;
@@ -1639,7 +1661,7 @@ function AdminPayments() {
           </CardHeader>
           <CardContent className="px-4 pb-3">
             <div className="text-xl font-bold text-foreground">{allPayments.length}</div>
-            <p className="text-[11px] text-muted-foreground">{failedCount} failed or refunded</p>
+            <p className="text-[11px] text-muted-foreground">{expiredCount} expired • {failedCount} failed/refunded</p>
           </CardContent>
         </Card>
       </div>
@@ -1651,6 +1673,7 @@ function AdminPayments() {
             { key: "ALL", label: "All Transactions", count: allPayments.length },
             { key: "PENDING", label: "Pending", count: pendingCount },
             { key: "PAID", label: "Paid", count: paidCount },
+            { key: "EXPIRED", label: "Expired", count: expiredCount },
             { key: "FAILED", label: "Failed / Refunded", count: failedCount },
           ].map((tab) => (
             <button
@@ -1753,6 +1776,8 @@ function AdminPayments() {
                             ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300"
                             : p.status === "PENDING"
                             ? "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-300"
+                            : p.status === "EXPIRED"
+                            ? "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300"
                             : "bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950 dark:text-rose-300"
                         }`}
                       >
@@ -1765,16 +1790,30 @@ function AdminPayments() {
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                        onClick={() => {
-                          if (confirm("Delete payment record?")) del.mutate(p.paymentId || p.id);
-                        }}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="inline-flex items-center gap-1">
+                        {p.status === "PENDING" && p.provider === "BAKONG_KHQR" && (
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            title="Re-verify Bakong status"
+                            className="h-7 w-7 text-primary hover:text-primary"
+                            disabled={verifyBakong.isPending}
+                            onClick={() => verifyBakong.mutate(p.paymentId || p.id)}
+                          >
+                            <RefreshCw className={`h-3.5 w-3.5 ${verifyBakong.isPending ? "animate-spin" : ""}`} />
+                          </Button>
+                        )}
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                          onClick={() => {
+                            if (confirm("Delete payment record?")) del.mutate(p.paymentId || p.id);
+                          }}
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
